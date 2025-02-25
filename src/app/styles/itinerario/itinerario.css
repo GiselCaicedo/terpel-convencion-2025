@@ -1,0 +1,20 @@
+@keyframes floatIcon {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.location-animation {
+    animation: floatIcon 2s infinite ease-in-out;
+}
+
+.image-hover-effect {
+    transition: transform 0.3s ease;
+}
+
+.image-hover-effect:hover {
+    transform: scale(1.1);
+}

@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #ffffff;
+    --foreground: #000000;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+/* Fuentes TerpelSans */
+@font-face {
+  font-family: 'TerpelSans';
+  src: url('/fuentes/TerpelSans-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TerpelSans';
+  src: url('/fuentes/TerpelSans-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TerpelSans-Condensed';
+  src: url('/fuentes/Terpel-Sans-Regular-Condensed.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TerpelSans';
+  src: url('/fuentes/TerpelSans-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TerpelSans-Condensed';
+  src: url('/fuentes/Terpel-Sans-Medium-Condensed.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TerpelSans';
+  src: url('/fuentes/TerpelSans-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TerpelSans';
+  src: url('/fuentes/TerpelSans-Black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TerpelSans';
+  src: url('/fuentes/TerpelSans-ExtraBold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@layer base {
+  body {
+    @apply overflow-x-hidden min-w-full;
+  }
+}
