@@ -105,14 +105,14 @@ const ImageGrid = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <h2 className="text-yellow-400 text-xl md:text-2xl font-bold mb-2">
+          {/* <h2 className="text-yellow-400 text-xl md:text-2xl font-bold mb-2">
             PUERTO DE ESAOUIRA
           </h2>
           <p className="text-white text-sm md:text-base">
             Esaouira es una bonita ciudad amurallada junto al mar que está a poco más de una
             hora de Marrakech. No dejes de recorrer sus calles en las que aún se deja ver la
             influencia portuguesa.
-          </p>
+          </p> */}
         </motion.div>
       </div>
 

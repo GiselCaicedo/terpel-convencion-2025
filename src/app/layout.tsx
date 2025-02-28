@@ -1,4 +1,3 @@
-
 import "./globals.css";
 import 'leaflet/dist/leaflet.css';
 import localFont from 'next/font/local';
@@ -6,6 +5,7 @@ import { Montserrat } from 'next/font/google';
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import WhatsAppChatButton from "./components/layout/WhatsApp";
+import ClientWrapper from "./components/layout/ClientWrapper";
 
 const terpelSans = localFont({
   src: [
@@ -66,10 +66,14 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${terpelSans.className} ${montserrat.className}`}>
       <body className="overflow-x-hidden min-w-full">
-        <Navbar />
-        {children}
-        <Footer />
-        <WhatsAppChatButton />
+        <ClientWrapper
+          navbar={<Navbar />}
+          footer={<Footer />}
+          whatsapp={<WhatsAppChatButton />}
+        >
+          {children}
+          
+        </ClientWrapper>
       </body>
     </html>
   );

@@ -1,4 +1,5 @@
-import React from 'react'
+import { fetchCupos } from '@/app/service/conexion'
+import React, { useState, useEffect } from 'react'
 
 const StatCard = ({ icon, number, text }) => (
   <div className="flex flex-col items-center justify-center text-center">
@@ -13,6 +14,28 @@ const StatCard = ({ icon, number, text }) => (
 )
 
 const Detalles = () => {
+  const [cuposDisponibles, setCuposDisponibles] = useState(700)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const cargarCupos = async () => {
+      try {
+        setLoading(true)
+        const data = await fetchCupos()
+        // Cálculo de cupos disponibles: 700 - (total_users + users_with_companions)
+        const cuposOcupados = data.total_users + data.users_with_companions
+        const disponibles = 700 - cuposOcupados
+        setCuposDisponibles(disponibles >= 0 ? disponibles : 0)
+      } catch (error) {
+        console.error('Error al cargar los cupos:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    cargarCupos()
+  }, [])
+
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -22,8 +45,10 @@ const Detalles = () => {
             alt="Users"
             className="h-10 w-auto mx-auto mb-4"
           />
-          <div className="text-5xl font-bold mb-2">764</div>
-          <div className="text-sm uppercase">Cupos disponibles: 800</div>
+          <div className="text-5xl font-bold mb-2">
+            {loading ? '...' : cuposDisponibles}
+          </div>
+          <div className="text-sm uppercase">Cupos disponibles: 700</div>
         </div>
 
         <StatCard 
@@ -34,13 +59,13 @@ const Detalles = () => {
 
         <StatCard 
           icon="location_icon.svg"
-          number="02"
-          text="Lugares por conocer"
+          number="03"
+          text="Ciudades por visitar"
         />
 
         <StatCard 
           icon="experiences_icon.svg"
-          number="10"
+          number="11"
           text="Cant. experiencias"
         />
       </div>

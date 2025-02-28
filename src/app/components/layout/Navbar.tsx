@@ -2,6 +2,7 @@
 import React, { useState, useEffect, ReactNode } from 'react';
 import { User, Menu, X } from 'lucide-react';
 import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
 
 // Define interface for NavLink props
 interface NavLinkProps {
@@ -9,13 +10,25 @@ interface NavLinkProps {
     children: ReactNode;
 }
 
+// Export a variable to use for main content padding
+export const NAVBAR_HEIGHT = {
+    mobile: '64px',   // 4rem or 16*4
+    tablet: '80px',   // 5rem or 16*5
+    desktop: '96px',  // 6rem or 16*6
+};
+
 export default function Navbar() {
+    const pathname = usePathname();
+    const router = useRouter();
     const [activeLink, setActiveLink] = useState('inicio');
     const [isVisible, setIsVisible] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
     const [mouseAtTop, setMouseAtTop] = useState(false);
     const [isAtTop, setIsAtTop] = useState(true);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    
+    // Check if current path is /formulario
+    const isFormularioPage = pathname === '/formulario';
 
     useEffect(() => {
         const controlNavbar = () => {
@@ -94,6 +107,11 @@ export default function Navbar() {
         setMobileMenuOpen(false); // Cerrar menú móvil al hacer clic
     };
 
+    const navigateToFormulario = () => {
+        router.push('/formulario');
+        setMobileMenuOpen(false); // Cerrar menú móvil al hacer clic
+    };
+
     const NavLink = ({ href, children }: NavLinkProps) => {
         const sectionId = href.replace('#', '');
         const isActive = activeLink === sectionId;
@@ -134,11 +152,12 @@ export default function Navbar() {
                 flex items-center justify-between fixed top-0 left-0 z-50
                 transition-all duration-300
                 ${isVisible ? 'translate-y-0' : '-translate-y-full'}
-                ${isAtTop ? 'bg-transparent' : 'bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm'}
+                ${isFormularioPage ? 'bg-red-600' : 
+                  isAtTop ? 'bg-transparent' : 'bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm'}
                 ${mobileMenuOpen ? 'bg-black' : ''}
             `}
         >
-            <div className="flex items-center">
+            <div className="flex items-center cursor-pointer" onClick={() => router.push('/')}>
                 <Image
                     src="/recursos/logo_terpel.png"
                     alt="Logo Terpel"
@@ -161,7 +180,7 @@ export default function Navbar() {
                 <NavLink href="#galeria">GALERÍA</NavLink>
                 <NavLink href="#mapas">MAPAS</NavLink>
                 <button
-                    onClick={() => scrollToSection('formulario')}
+                    onClick={navigateToFormulario}
                     className="bg-red-600 text-white px-4 lg:px-6 py-1 text-sm font-normal tracking-[0.2em] hover:bg-red-700 transition-colors rounded-3xl"
                 >
                     REGISTRARME
@@ -180,10 +199,10 @@ export default function Navbar() {
                     <NavLink href="/">INICIO</NavLink>
                     <NavLink href="/planes">PLANES</NavLink>
                     <NavLink href="#galeria">GALERÍA</NavLink>
-                    <NavLink href="#mapas">MAPAS</NavLink>
+                    <NavLink href="#mapas">MAPAS</NavLink>  
                     <div className="flex items-center justify-between mt-2">
                         <button
-                            onClick={() => scrollToSection('formulario')}
+                            onClick={navigateToFormulario}
                             className="bg-red-600 text-white px-6 py-2 text-sm font-normal tracking-[0.2em] hover:bg-red-700 transition-colors rounded-3xl"
                         >
                             REGISTRARME
