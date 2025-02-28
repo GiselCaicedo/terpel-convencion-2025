@@ -12,13 +12,13 @@ const Banner = () => {
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 1024 || window.innerHeight > window.innerWidth);
         };
-        
+
         // Check on initial render
         checkMobile();
-        
+
         // Add event listener for window resize
         window.addEventListener('resize', checkMobile);
-        
+
         // Clean up event listener
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
@@ -54,7 +54,7 @@ const Banner = () => {
                             className="w-full h-auto"
                         />
                     </div>
-                    
+
                     {/* Play button */}
                     <div className="mt-6">
                         <button
@@ -64,14 +64,14 @@ const Banner = () => {
                                     transition-all duration-300 hover:bg-red-700"
                             aria-label="Play video"
                         >
-                            <svg 
-                                className="w-6 h-6" 
-                                viewBox="0 0 24 24" 
+                            <svg
+                                className="w-6 h-6"
+                                viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="white"
                                 strokeWidth="2"
                             >
-                                <polygon points="10,8 16,12 10,16" fill="white"/>
+                                <polygon points="10,8 16,12 10,16" fill="white" />
                             </svg>
                         </button>
                     </div>
@@ -129,6 +129,7 @@ const Banner = () => {
                     <Image
                         src="/recursos/banner.png"
                         alt="Hot air balloon landscape"
+                        fill={true}
                         className="w-full h-full object-cover"
                         style={{
                             objectPosition: '50% 17%'
@@ -146,14 +147,14 @@ const Banner = () => {
                             transition-all duration-300 hover:bg-black/40"
                     aria-label="Play video"
                 >
-                    <svg 
-                        className="w-12 h-12" 
-                        viewBox="0 0 24 24" 
+                    <svg
+                        className="w-12 h-12"
+                        viewBox="0 0 24 24"
                         fill="none"
                         stroke="white"
                         strokeWidth="2"
                     >
-                        <polygon points="10,8 16,12 10,16" fill="white"/>
+                        <polygon points="10,8 16,12 10,16" fill="white" />
                     </svg>
                 </button>
             </div>

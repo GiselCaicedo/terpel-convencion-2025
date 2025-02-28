@@ -9,6 +9,7 @@ export default function Formulario() {
         src="/recursos/banner_footer.png"
         alt="FooterImagen"
         className="w-full h-auto object-cover"
+        fill={true}
       />
 
       <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent md:hidden"></div>

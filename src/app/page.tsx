@@ -50,8 +50,8 @@ const ImageGrid = () => {
           transition={{ duration: 0.3 }}
         >
           <Image
-            src="/recursos/imagen_ejemplo.jpg"
-            alt="Imagen fila 1 izquierda"
+            src="/galeria/Hotel-Melia-Castilla-Madrid.png"
+            alt="Hotel Melia Castilla Madrid"
             fill
             className="object-cover"
           />
@@ -62,8 +62,8 @@ const ImageGrid = () => {
           transition={{ duration: 0.3 }}
         >
           <Image
-            src="/recursos/imagen_ejemplo.jpg"
-            alt="Imagen fila 1 centro"
+            src="/galeria/Globo Marrakech.png"
+            alt="Cena en el Desierto de Marruecos"
             fill
             className="object-cover"
           />
@@ -74,8 +74,8 @@ const ImageGrid = () => {
           transition={{ duration: 0.3 }}
         >
           <Image
-            src="/recursos/imagen_ejemplo.jpg"
-            alt="Imagen fila 1 derecha"
+            src="/galeria/Hotel Marriot Le Meridien Marrakech.png"
+            alt="Hotel Hilton Canopy Madrid"
             fill
             className="object-cover"
           />
@@ -92,8 +92,8 @@ const ImageGrid = () => {
           whileHover={{ scale: 1.02 }}
         >
           <Image
-            src="/recursos/imagen_ejemplo.jpg"
-            alt="Edificio Metrópolis en Madrid"
+            src="/galeria/Hotel-Jaal-Riad-Marrakech.png"
+            alt="Hotel Jaal Riad Marrakech"
             fill
             className="object-cover"
           />
@@ -129,8 +129,8 @@ const ImageGrid = () => {
           transition={{ duration: 0.3 }}
         >
           <Image
-            src="/recursos/imagen_ejemplo.jpg"
-            alt="Imagen fila 3 izquierda"
+            src="/galeria/Artista-Internacional.png"
+            alt="Artista Internacional"
             fill
             className="object-cover"
           />
@@ -141,8 +141,8 @@ const ImageGrid = () => {
           transition={{ duration: 0.3 }}
         >
           <Image
-            src="/recursos/imagen_ejemplo.jpg"
-            alt="Imagen fila 3 derecha"
+            src="/galeria/Wah Show Madrid.png"
+            alt="Cena Santiago Bernabéu"
             fill
             className="object-cover"
           />
@@ -151,7 +151,6 @@ const ImageGrid = () => {
     </div>
   );
 };
-
 export default function Page() {
   // Variantes de animación para los títulos
   const titleVariants = {
@@ -227,7 +226,7 @@ export default function Page() {
                 viewport={{ once: true }}
                 variants={titleVariants}
               >
-                CONOCE LOS DESTINOS DE
+                ASÍ VIVIRÁS
               </motion.h2>
               <motion.div
                 className="relative inline-block mt-3 md:mt-4"
@@ -237,7 +236,7 @@ export default function Page() {
                 variants={subtitleVariants}
               >
                 <span className="text-3xl md:text-4xl lg:text-5xl font-bold text-red-600 tracking-wide">
-                  &ldquo;ENERGÍA SIN LÍMITE&rdquo;
+                  &ldquo;LA ENERGÍA SIN LÍMITES&rdquo;
                 </span>
                 <motion.div
                   className="absolute -bottom-2 left-0 h-1 bg-red-600"

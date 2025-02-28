@@ -207,6 +207,8 @@ const CurrencyConverter = () => {
                     src={`/recursos/${getCurrencyFlag(currencies.from1.type)}.png`}
                     alt={`Bandera ${currencies.from1.type}`}
                     className="w-8 h-8 rounded-lg shadow-sm"
+                    width={32}
+                    height={32}
                   />
                 </div>
                 <input
@@ -246,6 +248,8 @@ const CurrencyConverter = () => {
                     src={`/recursos/${getCurrencyFlag(currencies.from1.targetType)}.png`}
                     alt={`Bandera ${currencies.from1.targetType}`}
                     className="w-8 h-8 rounded-lg shadow-sm"
+                    width={32}
+                    height={32}
                   />
                 </div>
                 <input
@@ -270,6 +274,8 @@ const CurrencyConverter = () => {
                     src={`/recursos/${getCurrencyFlag(currencies.from2.type)}.png`}
                     alt={`Bandera ${currencies.from2.type}`}
                     className="w-8 h-8 rounded-lg shadow-sm"
+                    width={32}
+                    height={32}
                   />
                 </div>
                 <input
@@ -309,6 +315,8 @@ const CurrencyConverter = () => {
                     src={`/recursos/${getCurrencyFlag(currencies.from2.targetType)}.png`}
                     alt={`Bandera ${currencies.from2.targetType}`}
                     className="w-8 h-8 rounded-lg shadow-sm"
+                    width={32}
+                    height={32}
                   />
                 </div>
                 <input

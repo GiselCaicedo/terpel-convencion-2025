@@ -5,8 +5,8 @@ import Image from 'next/image';
 
 // Define interface for NavLink props
 interface NavLinkProps {
-  href: string;
-  children: ReactNode;
+    href: string;
+    children: ReactNode;
 }
 
 export default function Navbar() {
@@ -25,7 +25,7 @@ export default function Navbar() {
             } else {
                 setIsVisible(false);
             }
-            
+
             // Determinamos si estamos en la parte superior de la página para el efecto de fondo
             setIsAtTop(window.scrollY <= 100);
             setLastScrollY(window.scrollY);
@@ -138,24 +138,23 @@ export default function Navbar() {
                 ${mobileMenuOpen ? 'bg-black' : ''}
             `}
         >
-            {/* Logo section */}
             <div className="flex items-center">
                 <Image
                     src="/recursos/logo_terpel.png"
                     alt="Logo Terpel"
                     className="h-8 md:h-10 w-auto"
+                    width={200} 
+                    height={100}
                 />
             </div>
 
-            {/* Hamburger Menu for Mobile */}
-            <button 
+            <button
                 className="md:hidden text-white"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
                 {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
 
-            {/* Desktop Navigation links */}
             <div className="hidden md:flex items-center gap-4 lg:gap-10">
                 <NavLink href="/">INICIO</NavLink>
                 <NavLink href="/planes">PLANES</NavLink>

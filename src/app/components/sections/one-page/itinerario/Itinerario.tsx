@@ -7,17 +7,17 @@ import Image from 'next/image';
 
 // Define interfaces for our props
 interface ItineraryItem {
-  day: number;
-  title: string;
-  description: string;
+    day: number;
+    title: string;
+    description: string;
 }
 
 interface ItineraryCardProps {
-  day: number;
-  title: string;
-  description: string;
-  isReversed: boolean;
-  index: number;
+    day: number;
+    title: string;
+    description: string;
+    isReversed: boolean;
+    index: number;
 }
 
 // Componente de tarjeta para vista de escritorio (original)
@@ -42,7 +42,7 @@ const DesktopItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descri
 
     // Modificamos los cardVariants para incluir la posición Y inicial
     const cardVariants = {
-        hidden: (day: number) => ({ 
+        hidden: (day: number) => ({
             opacity: 0,
             x: -50,
             y: day === 2 ? -48 : day === 3 || day === 5 ? 16 : 0 // Convertimos las clases translate a píxeles
@@ -81,7 +81,7 @@ const DesktopItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descri
                 whileInView="visible"
                 viewport={{ once: true }}
             >
-                <motion.div 
+                <motion.div
                     className="text-center"
                     variants={contentVariants}
                 >
@@ -89,7 +89,7 @@ const DesktopItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descri
                     <h4 className="font-light text-gray-700 text-sm">{title}</h4>
                     <p className="text-sm font-light text-gray-700">{description}</p>
                 </motion.div>
-                <motion.div 
+                <motion.div
                     className="flex justify-center mt-5"
                     variants={contentVariants}
                 >
@@ -98,10 +98,11 @@ const DesktopItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descri
                             src="/recursos/location_itinerario.svg"
                             alt="Location"
                             className="w-15 h-15 relative z-20 location-animation"
+                            fill={true}
                         />
                     </div>
                 </motion.div>
-                <motion.div 
+                <motion.div
                     className="mt-4"
                     variants={contentVariants}
                 >
@@ -109,6 +110,7 @@ const DesktopItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descri
                         src="/recursos/imagen_ejemplo.jpg"
                         alt={`Day ${day}`}
                         className={imageClasses}
+                        fill={true}
                     />
                 </motion.div>
             </motion.div>
@@ -131,9 +133,10 @@ const DesktopItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descri
                     src="/recursos/imagen_ejemplo.jpg"
                     alt={`Day ${day}`}
                     className={imageClasses}
+                    fill={true}
                 />
             </motion.div>
-            <motion.div 
+            <motion.div
                 className="flex justify-center mt-5"
                 variants={contentVariants}
             >
@@ -142,10 +145,11 @@ const DesktopItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descri
                         src="/recursos/location_itinerario.svg"
                         alt="Location"
                         className="w-15 h-15 relative z-20 location-animation"
+                        fill={true}
                     />
                 </div>
             </motion.div>
-            <motion.div 
+            <motion.div
                 className="text-center mt-4"
                 variants={contentVariants}
             >
@@ -160,12 +164,12 @@ const DesktopItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descri
 // Componente de tarjeta para vista de tablet
 const TabletItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, description, isReversed, index }) => {
     const imageClasses = `
-        h-32 w-full object-cover rounded-xl
+        h-40 w-full object-cover rounded-xl
         image-hover-effect
     `;
 
     const cardVariants = {
-        hidden: { 
+        hidden: {
             opacity: 0,
             y: 20
         },
@@ -203,7 +207,7 @@ const TabletItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descrip
         >
             <div className=" bg-opacity-80 rounded-xl p-4 ">
                 <div className={`flex flex-row ${isReversed ? 'flex-row-reverse' : ''} items-center gap-4`}>
-                    <motion.div 
+                    <motion.div
                         className="w-1/2"
                         variants={contentVariants}
                     >
@@ -211,10 +215,11 @@ const TabletItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descrip
                             src="/recursos/imagen_ejemplo.jpg"
                             alt={`Day ${day}`}
                             className={imageClasses}
+                            fill={true}
                         />
                     </motion.div>
-                    
-                    <motion.div 
+
+                    <motion.div
                         className="w-1/2 flex flex-col items-center"
                         variants={contentVariants}
                     >
@@ -223,9 +228,10 @@ const TabletItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descrip
                                 src="/recursos/location_itinerario.svg"
                                 alt="Location"
                                 className="w-12 h-12 relative z-20 location-animation"
+                                fill={true}
                             />
                         </div>
-                        
+
                         <div className="text-center">
                             <h3 className="text-red-600 text-lg font-medium">Día {day}</h3>
                             <h4 className="font-medium text-gray-700 text-lg">{title}</h4>
@@ -246,19 +252,19 @@ interface MobileCarouselProps {
 // Componente para vista de carrusel en móvil
 const MobileCarousel: React.FC<MobileCarouselProps> = ({ itineraryData }) => {
     const [activeIndex, setActiveIndex] = useState(0);
-    
+
     const handlePrev = () => {
         setActiveIndex((prev) => (prev === 0 ? itineraryData.length - 1 : prev - 1));
     };
-    
+
     const handleNext = () => {
         setActiveIndex((prev) => (prev === itineraryData.length - 1 ? 0 : prev + 1));
     };
-    
+
     return (
         <div className="relative px-4 py-6">
             <div className="flex justify-between items-center mb-4">
-                <button 
+                <button
                     onClick={handlePrev}
                     className="bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center"
                     aria-label="Anterior"
@@ -268,7 +274,7 @@ const MobileCarousel: React.FC<MobileCarouselProps> = ({ itineraryData }) => {
                 <span className="text-gray-700">
                     {activeIndex + 1} / {itineraryData.length}
                 </span>
-                <button 
+                <button
                     onClick={handleNext}
                     className="bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center"
                     aria-label="Siguiente"
@@ -276,7 +282,7 @@ const MobileCarousel: React.FC<MobileCarouselProps> = ({ itineraryData }) => {
                     &rarr;
                 </button>
             </div>
-            
+
             <motion.div
                 key={activeIndex}
                 initial={{ opacity: 0, x: 100 }}
@@ -291,19 +297,21 @@ const MobileCarousel: React.FC<MobileCarouselProps> = ({ itineraryData }) => {
                             src="/recursos/imagen_ejemplo.jpg"
                             alt={`Day ${itineraryData[activeIndex].day}`}
                             className="h-40 w-full object-cover rounded-xl image-hover-effect"
+                            fill={true}
                         />
                     </div>
-                    
+
                     <div className="flex items-center justify-center">
                         <div className="relative">
                             <Image
                                 src="/recursos/location_itinerario.svg"
                                 alt="Location"
                                 className="w-12 h-12 relative z-20 location-animation"
+                                fill={true}
                             />
                         </div>
                     </div>
-                    
+
                     <div className="text-center w-full">
                         <h3 className="text-red-600 text-lg font-medium">
                             Día {itineraryData[activeIndex].day}
@@ -317,15 +325,14 @@ const MobileCarousel: React.FC<MobileCarouselProps> = ({ itineraryData }) => {
                     </div>
                 </div>
             </motion.div>
-            
+
             <div className="flex justify-center mt-4">
                 {itineraryData.map((_, idx) => (
-                    <button 
-                        key={idx} 
+                    <button
+                        key={idx}
                         onClick={() => setActiveIndex(idx)}
-                        className={`w-3 h-3 mx-1 rounded-full ${
-                            idx === activeIndex ? 'bg-red-600' : 'bg-gray-300'
-                        }`}
+                        className={`w-3 h-3 mx-1 rounded-full ${idx === activeIndex ? 'bg-red-600' : 'bg-gray-300'
+                            }`}
                         aria-label={`Ir al día ${idx + 1}`}
                     />
                 ))}
@@ -336,23 +343,23 @@ const MobileCarousel: React.FC<MobileCarouselProps> = ({ itineraryData }) => {
 
 const Itinerary: React.FC = () => {
     const [windowWidth, setWindowWidth] = useState<number>(0);
-    
+
     useEffect(() => {
         // Establecer el ancho de la ventana inicialmente y en cada resize
         const handleResize = () => {
             setWindowWidth(window.innerWidth);
         };
-        
+
         // Llamar al handler ahora y configurar el listener
         handleResize();
         window.addEventListener('resize', handleResize);
-        
+
         // Limpiar el listener cuando el componente se desmonte
         return () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-    
+
     const itineraryData: ItineraryItem[] = [
         {
             day: 1,
@@ -397,23 +404,23 @@ const Itinerary: React.FC = () => {
 
             <div className="relative z-10 py-8">
                 <div className="px-4 md:px-8 lg:px-12">
-                    <motion.h1 
+                    <motion.h1
                         initial={{ opacity: 0, y: -20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
                         className="text-3xl md:text-4xl font-bold text-red-600 text-center mb-4"
                     >
-                        ITINERARIO
+                        PLAN DE VIAJE
                     </motion.h1>
-                    <motion.p 
+                    <motion.p
                         initial={{ opacity: 0, y: -20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.2 }}
                         className="text-center text-gray-600 mb-8 md:mb-16 max-w-3xl mx-auto"
                     >
-                        Información pendiente
+                        Descubre una experiencia única en dos destinos fascinantes. Durante 8 días, Madrid y Marrakech serán el escenario perfecto para conectar, inspirar y vivir experiencias inolvidables.
                     </motion.p>
 
                     {/* Vista móvil con carrusel (menos de 640px) */}
@@ -465,15 +472,15 @@ const Itinerary: React.FC = () => {
                     )}
                 </div>
 
-                <motion.div 
+                <motion.div
                     className="text-center mt-8 md:mt-16"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.5, duration: 0.5 }}
                 >
-                    <a 
-                        href="/planes" 
+                    <a
+                        href="/planes"
                         className="inline-block bg-red-600 text-white px-6 py-2 md:px-8 md:py-3 rounded-md hover:bg-red-700 transition-colors"
                     >
                         VER DETALLE
