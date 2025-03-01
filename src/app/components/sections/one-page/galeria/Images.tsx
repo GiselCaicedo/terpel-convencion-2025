@@ -94,7 +94,7 @@ export default function ImageGrid() {
         },
         {
             id: 12,
-            src: "/galeria/Jardínes de Majorelle.png",
+            src: "/galeria/Jardines-de-Majorelle.png",
             alt: "Jardínes de Majorelle",
             title: "Jardínes de Majorelle​",
             description: "Un paseo por estos icónicos jardines de estilo francés, conocidos por su vibrante color azul y su colección de plantas exóticas.​"
@@ -136,7 +136,7 @@ export default function ImageGrid() {
         },
         {
             id: 18,
-            src: "/galeria/Restaurante Palais Dar Soukkar_.png",
+            src: "/galeria/Restaurante-Palais-Dar-Soukkar.png",
             alt: "Restaurante Palais Dar Soukkar",
             title: "Restaurante Palais Dar Soukkar​",
             description: ""

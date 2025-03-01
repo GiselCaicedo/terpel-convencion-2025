@@ -1,8 +1,8 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 
 const API_URL = 'https://api.convenciondealiadosterpel.com/api';
-const DEFAULT_TIMEOUT = 30000; // Increased from 10 seconds to 30 seconds
-const CACHE_DURATION = 5 * 60 * 100000; // 5 minutos en milisegundos
+const DEFAULT_TIMEOUT = 30000; 
+const CACHE_DURATION = 5 * 60 * 100000; 
 
 // Interfaces para respuestas de API
 interface ApiErrorResponse {
