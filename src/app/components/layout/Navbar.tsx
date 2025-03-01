@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect, ReactNode } from 'react';
-import { User, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -27,8 +27,9 @@ export default function Navbar() {
     const [isAtTop, setIsAtTop] = useState(true);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     
-    // Check if current path is /formulario
+    // Check if current path is /formulario or /formulario/thankfull
     const isFormularioPage = pathname === '/formulario';
+    const isThankfullPage = pathname === '/formulario/thankyou';
 
     useEffect(() => {
         const controlNavbar = () => {
@@ -95,8 +96,7 @@ export default function Navbar() {
     const scrollToSection = (sectionId: string) => {
         const section = document.getElementById(sectionId);
         if (section) {
-            // Aumentamos el offset para asegurar que el contenido esté bien visible
-            // Especialmente importante para la sección de galería
+
             const offsetTop = section.offsetTop - 120;
             window.scrollTo({
                 top: offsetTop,
@@ -104,12 +104,12 @@ export default function Navbar() {
             });
         }
         setActiveLink(sectionId);
-        setMobileMenuOpen(false); // Cerrar menú móvil al hacer clic
+        setMobileMenuOpen(false); 
     };
 
     const navigateToFormulario = () => {
         router.push('/formulario');
-        setMobileMenuOpen(false); // Cerrar menú móvil al hacer clic
+        setMobileMenuOpen(false); 
     };
 
     const NavLink = ({ href, children }: NavLinkProps) => {
@@ -145,6 +145,46 @@ export default function Navbar() {
         );
     };
 
+    // Logo component for reuse
+    const Logo = () => (
+        <div className="flex items-center cursor-pointer" onClick={() => router.push('/')}>
+            <Image
+                src="/recursos/logo_terpel.png"
+                alt="Logo Terpel"
+                className="h-8 md:h-10 w-auto"
+                width={200} 
+                height={100}
+            />
+        </div>
+    );
+
+    // Navigation links component for reuse
+    const NavigationLinks = () => (
+        <div className="hidden md:flex items-center gap-4 lg:gap-10">
+            <NavLink href="/">INICIO</NavLink>
+            <NavLink href="/planes">PLANES</NavLink>
+            <NavLink href="#galeria">GALERÍA</NavLink>
+            <NavLink href="#mapas">MAPAS</NavLink>
+            <button
+                onClick={navigateToFormulario}
+                className="bg-red-600 text-white px-4 lg:px-6 py-1 text-sm font-normal tracking-[0.2em] hover:bg-red-700 transition-colors rounded-3xl"
+            >
+                REGISTRARME
+            </button>
+        
+        </div>
+    );
+
+    // Mobile menu button
+    const MobileMenuButton = () => (
+        <button
+            className="md:hidden text-white"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+    );
+
     return (
         <nav
             className={`
@@ -153,45 +193,25 @@ export default function Navbar() {
                 transition-all duration-300
                 ${isVisible ? 'translate-y-0' : '-translate-y-full'}
                 ${isFormularioPage ? 'bg-red-600' : 
+                  isThankfullPage ? '' :
                   isAtTop ? 'bg-transparent' : 'bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm'}
                 ${mobileMenuOpen ? 'bg-black' : ''}
             `}
         >
-            <div className="flex items-center cursor-pointer" onClick={() => router.push('/')}>
-                <Image
-                    src="/recursos/logo_terpel.png"
-                    alt="Logo Terpel"
-                    className="h-8 md:h-10 w-auto"
-                    width={200} 
-                    height={100}
-                />
-            </div>
-
-            <button
-                className="md:hidden text-white"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-
-            <div className="hidden md:flex items-center gap-4 lg:gap-10">
-                <NavLink href="/">INICIO</NavLink>
-                <NavLink href="/planes">PLANES</NavLink>
-                <NavLink href="#galeria">GALERÍA</NavLink>
-                <NavLink href="#mapas">MAPAS</NavLink>
-                <button
-                    onClick={navigateToFormulario}
-                    className="bg-red-600 text-white px-4 lg:px-6 py-1 text-sm font-normal tracking-[0.2em] hover:bg-red-700 transition-colors rounded-3xl"
-                >
-                    REGISTRARME
-                </button>
-                <a
-                    href="#perfil"
-                    className="text-white hover:text-gray-300 transition-colors"
-                >
-                    <User size={20} />
-                </a>
-            </div>
+            {/* Conditionally render elements based on the path */}
+            {isThankfullPage ? (
+                <>
+                    <NavigationLinks />
+                    <MobileMenuButton />
+                    <Logo />
+                </>
+            ) : (
+                <>
+                    <Logo />
+                    <MobileMenuButton />
+                    <NavigationLinks />
+                </>
+            )}
 
             {/* Mobile Menu */}
             {mobileMenuOpen && (
@@ -207,12 +227,7 @@ export default function Navbar() {
                         >
                             REGISTRARME
                         </button>
-                        <a
-                            href="#perfil"
-                            className="text-white hover:text-gray-300 transition-colors"
-                        >
-                            <User size={20} />
-                        </a>
+                    
                     </div>
                 </div>
             )}

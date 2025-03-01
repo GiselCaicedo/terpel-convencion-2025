@@ -18,6 +18,7 @@ import {
     TicketsPlane
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import LoadingScreen from '../components/layout/LoadingScreen';
 
 interface ValidationErrors {
     [fieldName: string]: string;
@@ -191,7 +192,7 @@ export default function RegistrationForm() {
         acomodaciones: [],
         extensiones: []
     });
-
+    const [dataLoaded, setDataLoaded] = useState(false);
     // Estados para control de UI
     const [currentStep, setCurrentStep] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -212,7 +213,7 @@ export default function RegistrationForm() {
     ];
 
     const router = useRouter();
-    // Función para cargar datos iniciales
+
     useEffect(() => {
         const loadData = async () => {
             setLoading(true);
@@ -228,8 +229,7 @@ export default function RegistrationForm() {
                     extensiones: data.extensiones?.filter((ext: { nombre: string }) => ext.nombre !== 'Pre') || [],
                     ciudades: []
                 });
-
-                console.log(data)
+                setDataLoaded(true); // Marcar que los datos se han cargado
             } catch (err) {
                 setError('Error al cargar datos. Intenta nuevamente.');
                 console.log(err)
@@ -264,6 +264,78 @@ export default function RegistrationForm() {
                 .catch(() => setDataLists(prev => ({ ...prev, ciudades: [] })));
         }
     }, [formData.departamento_id]);
+
+    // Add these functions at the top of your component, after all the state definitions
+
+    // Function to save form data to localStorage
+    const saveFormDataToLocalStorage = useCallback(() => {
+        try {
+            localStorage.setItem('registrationFormData', JSON.stringify(formData));
+            localStorage.setItem('registrationFormAcompanante', JSON.stringify(acompanante));
+            localStorage.setItem('registrationFormTieneAcompanante', JSON.stringify(tiene_acompanante));
+            localStorage.setItem('registrationFormCurrentStep', JSON.stringify(currentStep));
+        } catch (error) {
+            console.error('Error saving to localStorage:', error);
+        }
+    }, [formData, acompanante, tiene_acompanante, currentStep]);
+
+    // Function to load form data from localStorage
+    const loadFormDataFromLocalStorage = useCallback(() => {
+        try {
+            const savedFormData = localStorage.getItem('registrationFormData');
+            const savedAcompanante = localStorage.getItem('registrationFormAcompanante');
+            const savedTieneAcompanante = localStorage.getItem('registrationFormTieneAcompanante');
+            const savedCurrentStep = localStorage.getItem('registrationFormCurrentStep');
+
+            if (savedFormData) {
+                setFormData(JSON.parse(savedFormData));
+            }
+
+            if (savedAcompanante) {
+                setAcompanante(JSON.parse(savedAcompanante));
+            }
+
+            if (savedTieneAcompanante) {
+                setTieneAcompanante(JSON.parse(savedTieneAcompanante));
+            }
+
+            if (savedCurrentStep) {
+                setCurrentStep(JSON.parse(savedCurrentStep));
+            }
+        } catch (error) {
+            console.error('Error loading from localStorage:', error);
+        }
+    }, []);
+
+    // Function to clear localStorage data (for use after successful submission)
+    const clearLocalStorageData = useCallback(() => {
+        try {
+            localStorage.removeItem('registrationFormData');
+            localStorage.removeItem('registrationFormAcompanante');
+            localStorage.removeItem('registrationFormTieneAcompanante');
+            localStorage.removeItem('registrationFormCurrentStep');
+        } catch (error) {
+            console.error('Error clearing localStorage:', error);
+        }
+    }, []);
+
+    // Add these useEffect hooks to load data on component mount and save on data change
+
+    // Load data from localStorage when component mounts
+    useEffect(() => {
+        if (dataLoaded) {
+            loadFormDataFromLocalStorage();
+        }
+    }, [dataLoaded, loadFormDataFromLocalStorage]);
+
+    // Save data to localStorage when form data changes
+    useEffect(() => {
+        if (dataLoaded) {
+            saveFormDataToLocalStorage();
+        }
+    }, [formData, acompanante, tiene_acompanante, currentStep, dataLoaded, saveFormDataToLocalStorage]);
+
+
 
     const isStepValid = useCallback((step: number): boolean => {
         switch (step) {
@@ -621,7 +693,6 @@ export default function RegistrationForm() {
             }
         }
 
-        // If there are errors, navigate to the first section with errors
         if (hasErrors && firstErrorStep !== null) {
             setCurrentStep(firstErrorStep);
             return false;
@@ -631,9 +702,8 @@ export default function RegistrationForm() {
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault(); // Previene la recarga de la página
+        e.preventDefault();
 
-        // Validar la sección final (términos y condiciones)
         if (!validateSection(5)) {
             setError('Por favor acepta los términos y condiciones antes de enviar.');
             return;
@@ -663,7 +733,7 @@ export default function RegistrationForm() {
                 nombre_completo,
                 tiene_acompanante: tiene_acompanante, // Asegúrate de incluir este campo explícitamente
                 terminos_y_condiciones: !!formData.terminos_y_condiciones,
-                imagen_pasaporte 
+                imagen_pasaporte
             };
 
             // Incluir datos del acompañante si aplica
@@ -678,10 +748,10 @@ export default function RegistrationForm() {
             await registerUser(formDataToSubmit);
 
             setSuccess(true);
-
+            clearLocalStorageData();
             // Redireccionar a la página de agradecimiento
             setTimeout(() => {
-                router.push('/formulario/thankful');
+                router.push('/formulario/thankyou');
             }, 1500);
 
         } catch (err: unknown) {
@@ -1219,12 +1289,15 @@ export default function RegistrationForm() {
 
                         <div className="mt-4">
                             <CheckboxField
-                                label="Acepto los términos y condiciones"
+                                label={
+                                    <>
+                                        Acepto la <a href="/formulario/tc.pdf" target="_blank" rel="noopener noreferrer" className='text-red-500'>Política de Privacidad</a>
+                                    </>
+                                }
                                 name="terminos_y_condiciones"
                                 checked={formData.terminos_y_condiciones}
                                 onChange={handleInputChange}
                                 required
-                                onClick={() => setShowPolicy(true)}
                                 error={getFieldError('terminos_y_condiciones')}
                             />
                         </div>
@@ -1253,6 +1326,10 @@ export default function RegistrationForm() {
         });
 
         return count;
+    }
+
+    if (!dataLoaded) {
+        return <LoadingScreen />;
     }
 
     return (

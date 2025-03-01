@@ -4,7 +4,6 @@ import localFont from 'next/font/local';
 import { Montserrat } from 'next/font/google';
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
-import WhatsAppChatButton from "./components/layout/WhatsApp";
 import ClientWrapper from "./components/layout/ClientWrapper";
 
 const terpelSans = localFont({
@@ -69,7 +68,6 @@ export default function RootLayout({
         <ClientWrapper
           navbar={<Navbar />}
           footer={<Footer />}
-          whatsapp={<WhatsAppChatButton />}
         >
           {children}
           

@@ -2,20 +2,18 @@
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
-export default function ClientWrapper({ 
+export default function ClientWrapper({
   children,
   navbar,
   footer,
-  whatsapp
-}: { 
+}: {
   children: React.ReactNode,
   navbar: React.ReactNode,
   footer: React.ReactNode,
-  whatsapp: React.ReactNode
 }) {
   const pathname = usePathname();
   const isFormularioPage = pathname === '/formulario';
-  
+
   return (
     <>
       {navbar}
@@ -23,7 +21,6 @@ export default function ClientWrapper({
         {children}
       </div>
       {footer}
-      {whatsapp}
     </>
   );
 }

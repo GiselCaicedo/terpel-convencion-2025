@@ -6,56 +6,45 @@ import Image from 'next/image';
 const Banner = () => {
     const [showVideo, setShowVideo] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
-
-    // Function to check viewport width and set mobile state
     useEffect(() => {
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 1024 || window.innerHeight > window.innerWidth);
         };
 
-        // Check on initial render
         checkMobile();
 
-        // Add event listener for window resize
         window.addEventListener('resize', checkMobile);
 
-        // Clean up event listener
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
     const openVideo = () => setShowVideo(true);
     const closeVideo = () => setShowVideo(false);
-
-    // Mobile/Tablet Version
     if (isMobile) {
         return (
-            <div className="relative w-full h-screen flex flex-col justify-between">
-                {/* Background container */}
-                <div className="absolute inset-0">
-                    <div className="relative w-full h-full">
-                        <Image
-                            src="/recursos/KV_backrojo_hor.png"
-                            alt="Energía Sin Límites background"
-                            className="w-full h-full object-cover"
-                            style={{
-                                objectPosition: 'center center'
-                            }}
-                        />
-                    </div>
+            <div className="relative w-full h-screen flex flex-col justify-between">                <div className="absolute inset-0">
+                <div className="relative w-full h-full">
+                    <Image
+                        src="/recursos/KV_backrojo_hor.png"
+                        alt="Energía Sin Límites background"
+                        className="w-full h-full object-cover"
+                        width={1920}
+                        height={1080}
+                        style={{
+                            objectPosition: 'center center'
+                        }}
+                    />
                 </div>
-
-                {/* Logo and content overlay */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center px-8 sm:px-16 pt-4 space-y-0">
-                    {/* Logo image */}
-                    <div className="w-full max-w-xs sm:max-w-sm mx-auto mb-0">
-                        <Image
-                            src="/recursos/Kv_transp.png"
-                            alt="Energía Sin Límites logo"
-                            className="w-full h-auto"
-                        />
-                    </div>
-
-                    {/* Play button */}
+            </div>
+                <div className="absolute inset-0 flex flex-col items-center justify-center px-8 sm:px-16 pt-4 space-y-0">                    <div className="w-full max-w-xs sm:max-w-sm mx-auto mb-0">
+                    <Image
+                        src="/recursos/Kv_transp.png"
+                        alt="Energía Sin Límites logo"
+                        className="w-full h-auto"
+                        width={500}
+                        height={300}
+                    />
+                </div>
                     <div className="mt-6">
                         <button
                             onClick={openVideo}
@@ -76,8 +65,6 @@ const Banner = () => {
                         </button>
                     </div>
                 </div>
-
-                {/* Text overlay */}
                 <div className="absolute bottom-16 left-0 right-0 flex flex-col items-center text-center">
                     <div className="mx-auto max-w-xs">
                         <h1 className="text-yellow-300 text-3xl font-bold leading-none">
@@ -95,8 +82,6 @@ const Banner = () => {
                         </div>
                     </div>
                 </div>
-
-                {/* Video Modal */}
                 {showVideo && (
                     <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
                         <div className="relative w-full max-w-4xl aspect-video mx-auto">
@@ -129,7 +114,8 @@ const Banner = () => {
                     <Image
                         src="/recursos/banner.png"
                         alt="Hot air balloon landscape"
-                        fill={true}
+                        width={1920}
+                        height={1080}
                         className="w-full h-full object-cover"
                         style={{
                             objectPosition: '50% 17%'

@@ -1,5 +1,5 @@
 'use client';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import Banner from './components/sections/one-page/home/portada/Banner';
@@ -11,6 +11,7 @@ import CurrencyConverter from './components/sections/one-page/locacion/Converter
 import WeatherDisplay from './components/sections/one-page/locacion/Clima';
 import Formulario from './components/sections/one-page/form/Formulario';
 import DetallesInicio from './components/sections/one-page/details/DetallesInicio';
+import ImageGrid from './components/sections/one-page/galeria/Images';
 
 // Define the props interface for the FadeInSection component
 interface FadeInSectionProps {
@@ -34,124 +35,13 @@ const FadeInSection: React.FC<FadeInSectionProps> = ({ children, delay = 0, id }
   );
 };
 
-const ImageGrid = () => {
-  return (
-    <div className="grid grid-cols-1 gap-2">
-      <motion.div
-        className="grid grid-cols-3 gap-2 pt-2"
-        initial={{ opacity: 0, scale: 0.95 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-      >
-        <motion.div
-          className="w-full relative aspect-square"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3 }}
-        >
-          <Image
-            src="/galeria/Hotel-Melia-Castilla-Madrid.png"
-            alt="Hotel Melia Castilla Madrid"
-            fill
-            className="object-cover"
-          />
-        </motion.div>
-        <motion.div
-          className="w-full relative aspect-square"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3 }}
-        >
-          <Image
-            src="/galeria/Globo Marrakech.png"
-            alt="Cena en el Desierto de Marruecos"
-            fill
-            className="object-cover"
-          />
-        </motion.div>
-        <motion.div
-          className="w-full relative aspect-square"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3 }}
-        >
-          <Image
-            src="/galeria/Hotel Marriot Le Meridien Marrakech.png"
-            alt="Hotel Hilton Canopy Madrid"
-            fill
-            className="object-cover"
-          />
-        </motion.div>
-      </motion.div>
 
-      <div className="relative w-full overflow-hidden shadow-lg aspect-video">
-        <motion.div
-          className="w-full h-full relative"
-          initial={{ opacity: 0, x: -100 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          whileHover={{ scale: 1.02 }}
-        >
-          <Image
-            src="/galeria/Hotel-Jaal-Riad-Marrakech.png"
-            alt="Hotel Jaal Riad Marrakech"
-            fill
-            className="object-cover"
-          />
-        </motion.div>
-        <motion.div
-          className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 p-10"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          {/* <h2 className="text-yellow-400 text-xl md:text-2xl font-bold mb-2">
-            PUERTO DE ESAOUIRA
-          </h2>
-          <p className="text-white text-sm md:text-base">
-            Esaouira es una bonita ciudad amurallada junto al mar que está a poco más de una
-            hora de Marrakech. No dejes de recorrer sus calles en las que aún se deja ver la
-            influencia portuguesa.
-          </p> */}
-        </motion.div>
-      </div>
-
-      <motion.div
-        className="grid grid-cols-2 gap-2"
-        initial={{ opacity: 0, x: 100 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-      >
-        <motion.div
-          className="w-full relative aspect-video"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3 }}
-        >
-          <Image
-            src="/galeria/Artista-Internacional.png"
-            alt="Artista Internacional"
-            fill
-            className="object-cover"
-          />
-        </motion.div>
-        <motion.div
-          className="w-full relative aspect-video"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3 }}
-        >
-          <Image
-            src="/galeria/Wah Show Madrid.png"
-            alt="Cena Santiago Bernabéu"
-            fill
-            className="object-cover"
-          />
-        </motion.div>
-      </motion.div>
-    </div>
-  );
-};
 export default function Page() {
+  // Add debugging to check component rendering
+  useEffect(() => {
+    console.log('Page component mounted');
+  }, []);
+
   // Variantes de animación para los títulos
   const titleVariants = {
     hidden: { opacity: 0, y: -20 },
@@ -217,7 +107,7 @@ export default function Page() {
 
         <Itinerario />
         <div id="galeria" className="relative w-full pt-12 md:pt-24 bg-white">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-4 pb-20">
             <div className="text-center">
               <motion.h2
                 className="text-3xl md:text-4xl lg:text-5xl font-bold text-red-600 tracking-wide"
@@ -248,19 +138,6 @@ export default function Page() {
               </motion.div>
             </div>
           </div>
-
-          <FadeInSection delay={0.6}>
-            <div className="w-full mt-8 md:mt-12 overflow-hidden relative" style={{ height: '50vh' }}>
-              <video
-                src="/recursos/video.mp4"
-                className="w-full h-full object-cover"
-                autoPlay
-                muted
-                playsInline
-                loop
-              />
-            </div>
-          </FadeInSection>
         </div>
 
         <FadeInSection delay={0.7}>
@@ -283,9 +160,14 @@ export default function Page() {
           <WeatherDisplay />
         </FadeInSection>
 
-        <FadeInSection delay={1} id="formulario">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}  // Use animate instead of whileInView
+          transition={{ duration: 0.8 }}
+          className="w-full"
+        >
           <Formulario />
-        </FadeInSection>
+        </motion.div>
       </main>
     </AnimatePresence>
   );

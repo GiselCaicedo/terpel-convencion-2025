@@ -1,7 +1,7 @@
 import React, { MouseEvent } from 'react';
 
 interface CheckboxFieldProps {
-    label: string;
+    label: React.ReactNode; // Changed from string to ReactNode
     name: string;
     checked: boolean;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

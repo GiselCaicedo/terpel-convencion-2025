@@ -1,32 +1,13 @@
 'use client'
 
 import Image from 'next/image';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import Banner from '../components/sections/one-page/home/portada/Banner';
 
 export default function Page() {
-  const [currentSlide, setCurrentSlide] = useState(0);
   const [activeTab, setActiveTab] = useState('info');
   const [expandedDay, setExpandedDay] = useState<string | null>('day1');
 
-  const images = [
-    "/recursos/planes.jpg",
-    "/recursos/imagen_ejemplo.jpg",
-    "/recursos/planes.jpg"
-  ];
-
-  // Auto-slide effect
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-    }, 5000); // Increased to 5 seconds for better user experience
-
-    return () => clearInterval(interval);
-  }, [images.length]);
-
-  // Handle manual navigation
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
-  };
 
   const toggleDay = (day: string) => {
     setExpandedDay(expandedDay === day ? null : day);
@@ -34,55 +15,22 @@ export default function Page() {
 
   return (
     <div className="flex flex-col items-center w-full bg-white font-sans">
-      {/* Hero Carousel with enhanced transitions */}
-      <div className="w-full relative overflow-hidden shadow-xl rounded-b-lg" style={{ height: "650px" }}>
-        {/* Overlay gradient for better text visibility */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-40 z-10"></div>
-
-        {images.map((src, index) => (
-          <div
-            key={index}
-            className="absolute w-full h-full transition-all duration-1000 ease-in-out"
-            style={{
-              transform: `translateX(${(index - currentSlide) * 100}%)`,
-              opacity: index === currentSlide ? 1 : 0
-            }}
-          >
-            <Image
-              src={src}
-              alt={`Marrakech slide ${index + 1}`}
-              className="w-full h-full object-cover"
-              width={1920}
-              height={1080}
-            />
-          </div>
-        ))}
-
-        {/* Hero Content */}
-        <div className="absolute bottom-0 left-0 right-0 z-20 text-center p-8 bg-gradient-to-t from-black/70 to-transparent" />
-
-        {/* Enhanced Navigation Dots */}
-        <div className="absolute bottom-36 left-0 right-0 flex justify-center gap-3 z-20">
-          {images.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => goToSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${currentSlide === index ? 'bg-white w-6' : 'bg-white/60 hover:bg-white'
-                }`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
-        </div>
+      <div className="w-full relative overflow-hidden shadow-xl" style={{ height: "1000px" }}>
+        <Banner />
       </div>
-
-      {/* Main Content Container */}
+      <div className="w-full relative" style={{ height: '50px' }}>
+        <Image
+          src="/recursos/franja_textura.png"
+          alt="Franja textura"
+          fill
+          className="object-cover"
+        />
+      </div>
       <div className="w-full max-w-5xl px-4 mt-12">
-        {/* Enhanced Title Section */}
         <div className="w-full text-center mb-8">
           <h1 className="text-red-600 text-4xl font-light tracking-wider">MADRID - MARRAKECH</h1>
           <h2 className="text-red-600 text-xl font-light mt-2">8 DÍAS</h2>
 
-          {/* Decorative element */}
           <div className="flex items-center justify-center mt-6">
             <div className="h-px w-16 bg-red-300"></div>
             <div className="mx-4">
@@ -94,7 +42,6 @@ export default function Page() {
           </div>
         </div>
 
-        {/* Enhanced Description Text */}
         <div className="w-full mb-10 text-center">
           <p className="font-light text-lg leading-relaxed text-gray-700 max-w-2xl mx-auto">
             Marrakech es una ciudad que parece diseñada para el disfrute del viajero. Sus calles, plazas, edificios, jardines y monumentos parecen ideados para que cualquier persona que visite Marrakech desee volver.
@@ -102,10 +49,8 @@ export default function Page() {
         </div>
 
 
-        {/* Package Information Tabs with Enhanced Design */}
         <div className="w-full mb-16">
           <div className="rounded-xl overflow-hidden bg-white">
-            {/* Enhanced Tab Navigation */}
             <div className="flex border-b">
               <button
                 className={`px-6 py-4 text-sm font-medium transition-all duration-200 flex-1 ${activeTab === 'info' ? 'text-red-600 border-b-2 border-red-500 bg-red-50' : 'text-gray-600 hover:bg-gray-50'}`}
@@ -127,9 +72,7 @@ export default function Page() {
               </button>
             </div>
 
-            {/* Tab Content */}
             <div className="p-6">
-              {/* INFORMACIÓN GENERAL TAB - Enhanced but keeping structure */}
               {activeTab === 'info' && (
                 <div>
                   <div className="mb-10">
@@ -200,7 +143,6 @@ export default function Page() {
                 </div>
               )}
 
-              {/* DETALLE ITINERARIO TAB - Enhanced and Redesigned */}
               {activeTab === 'itinerary' && (
                 <div className="bg-white rounded-xl">
                   <h3 className="text-gray-800 font-medium mb-6 pb-2 border-b border-gray-100 flex items-center">
@@ -211,7 +153,6 @@ export default function Page() {
                   </h3>
 
                   <div className="space-y-6">
-                    {/* Day 1 - Redesigned Accordion */}
                     <div className="border border-gray-200 rounded-xl overflow-hidden transition-all duration-300 hover:border-red-200">
                       <button
                         className={`w-full flex justify-between items-center p-5 text-left transition-colors duration-300 ${expandedDay === 'day1' ? 'bg-gradient-to-r from-red-50 to-white' : 'bg-white hover:bg-gray-50'
@@ -242,7 +183,6 @@ export default function Page() {
                       {expandedDay === 'day1' && (
                         <div className="p-6 border-t border-gray-200 bg-white">
                           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            {/* Columna izquierda - Actividades */}
                             <div>
                               <div className="flex items-center mb-4">
                                 <h4 className="text-lg font-medium text-gray-800">Actividades del día</h4>
@@ -284,7 +224,6 @@ export default function Page() {
                               </div>
                             </div>
 
-                            {/* Columna derecha - Alojamiento */}
                             <div>
                               <div className="grid grid-cols-2 gap-3">
                                 <Image
@@ -322,7 +261,6 @@ export default function Page() {
                       )}
                     </div>
 
-                    {/* Day 2 - Redesigned Accordion */}
                     <div className="border border-gray-200 rounded-xl overflow-hidden transition-all duration-300 hover:border-red-200">
                       <button
                         className={`w-full flex justify-between items-center p-5 text-left transition-colors duration-300 ${expandedDay === 'day2' ? 'bg-gradient-to-r from-red-50 to-white' : 'bg-white hover:bg-gray-50'
@@ -357,7 +295,6 @@ export default function Page() {
                       )}
                     </div>
 
-                    {/* Day 3 - Redesigned Accordion */}
                     <div className="border border-gray-200 rounded-xl overflow-hidden transition-all duration-300 hover:border-red-200">
                       <button
                         className={`w-full flex justify-between items-center p-5 text-left transition-colors duration-300 ${expandedDay === 'day3' ? 'bg-gradient-to-r from-red-50 to-white' : 'bg-white hover:bg-gray-50'
@@ -392,7 +329,6 @@ export default function Page() {
                       )}
                     </div>
 
-                    {/* Day 4 - Redesigned Accordion */}
                     <div className="border border-gray-200 rounded-xl overflow-hidden transition-all duration-300 hover:border-red-200">
                       <button
                         className={`w-full flex justify-between items-center p-5 text-left transition-colors duration-300 ${expandedDay === 'day4' ? 'bg-gradient-to-r from-red-50 to-white' : 'bg-white hover:bg-gray-50'
@@ -430,7 +366,6 @@ export default function Page() {
                 </div>
               )}
 
-              {/* REQUISITOS TAB - Enhanced */}
               {activeTab === 'requirements' && (
                 <div>
                   <h3 className="text-gray-800 font-medium mb-6 pb-2 border-b border-gray-100 flex items-center">
@@ -440,46 +375,108 @@ export default function Page() {
                     REQUISITOS - DOCUMENTACIÓN
                   </h3>
 
-                  <ul className="space-y-4">
-                    <li className="p-4 bg-white shadow-sm rounded-lg hover:bg-red-50 transition-all">
-                      <p className="font-medium text-gray-800 flex items-center">
-                        <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 text-xs">1</span>
-                        Pasaporte:
-                      </p>
-                      <p className="text-gray-600 ml-9">Vigente durante al menos 3 meses después de la fecha prevista de salida del Espacio Schengen.</p>
-                    </li>
+                  <div className="mb-8">
+                    <h4 className="text-gray-800 font-medium mb-4 pb-2 border-b border-gray-100 text-lg">
+                      REQUISITOS PARA SALIR DEL PAÍS
+                    </h4>
+                    <ul className="space-y-4">
+                      <li className="p-4 bg-white shadow-sm rounded-lg hover:bg-red-50 transition-all">
+                        <p className="font-medium text-gray-800 flex items-center">
+                          <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 text-xs">•</span>
+                          Pasaporte:
+                        </p>
+                        <p className="text-gray-600 ml-9">Es el documento que identifica a los colombianos en el exterior y debe tener un mínimo de vigencia de 6 meses posterior a la fecha de viaje.</p>
+                      </li>
+                      <li className="p-4 bg-white shadow-sm rounded-lg hover:bg-red-50 transition-all">
+                        <p className="font-medium text-gray-800 flex items-center">
+                          <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 text-xs">•</span>
+                          Voucher de alojamiento.
+                        </p>
+                      </li>
+                      <li className="p-4 bg-white shadow-sm rounded-lg hover:bg-red-50 transition-all">
+                        <p className="font-medium text-gray-800 flex items-center">
+                          <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 text-xs">•</span>
+                          Tiquete de salida y regreso al país.
+                        </p>
+                      </li>
+                    </ul>
+                  </div>
 
-                    <li className="p-4 bg-white shadow-sm rounded-lg hover:bg-red-50 transition-all">
-                      <p className="font-medium text-gray-800 flex items-center">
-                        <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 text-xs">2</span>
-                        Seguro de viaje:
-                      </p>
-                      <p className="text-gray-600 ml-9">Cobertura mínima de 30.000 euros para emergencias médicas, hospitalización y repatriación.</p>
-                    </li>
+                  <div className="mb-8">
+                    <h4 className="text-gray-800 font-medium mb-4 pb-2 border-b border-gray-100 text-lg">
+                      REQUISITOS INGRESAR A ESPAÑA Y MARRUECOS
+                    </h4>
+                    <ul className="space-y-4">
+                      <li className="p-4 bg-white shadow-sm rounded-lg hover:bg-red-50 transition-all">
+                        <p className="font-medium text-gray-800 flex items-center">
+                          <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 text-xs">•</span>
+                          Pasaporte electrónico o de lectura mecánica con vigencia mínima de 6 meses a partir de la fecha de ingreso.
+                        </p>
+                      </li>
+                      <li className="p-4 bg-white shadow-sm rounded-lg hover:bg-red-50 transition-all">
+                        <p className="font-medium text-gray-800 flex items-center">
+                          <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 text-xs">•</span>
+                          Tiquete aéreo de ida y regreso.
+                        </p>
+                      </li>
+                      <li className="p-4 bg-white shadow-sm rounded-lg hover:bg-red-50 transition-all">
+                        <p className="font-medium text-gray-800 flex items-center">
+                          <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 text-xs">•</span>
+                          Seguro médico de viaje internacional (Lo entrega la agencia).
+                        </p>
+                      </li>
+                      <li className="p-4 bg-white shadow-sm rounded-lg hover:bg-red-50 transition-all">
+                        <p className="font-medium text-gray-800 flex items-center">
+                          <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 text-xs">•</span>
+                          Acreditar solvencia económica que le permita viajar y financiar estadía (Dinero en efectivo, tarjeta de crédito).
+                        </p>
+                      </li>
+                      <li className="p-4 bg-white shadow-sm rounded-lg hover:bg-red-50 transition-all">
+                        <p className="font-medium text-gray-800 flex items-center">
+                          <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 text-xs">•</span>
+                          Voucher de alojamiento (Lo entrega la agencia).
+                        </p>
+                      </li>
+                      <li className="p-4 bg-white shadow-sm rounded-lg hover:bg-red-50 transition-all">
+                        <p className="font-medium text-gray-800 flex items-center">
+                          <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 text-xs">•</span>
+                          Actualmente no hay vacunas obligatorias.
+                        </p>
+                      </li>
+                      <li className="p-4 bg-white shadow-sm rounded-lg hover:bg-red-50 transition-all">
+                        <p className="font-medium text-gray-800 flex items-center">
+                          <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 text-xs">•</span>
+                          Lo anterior está sujeto a requisitos adicionales por parte de las entidades gubernamentales.
+                        </p>
+                      </li>
+                    </ul>
+                  </div>
 
-                    <li className="p-4 bg-white shadow-sm rounded-lg hover:bg-red-50 transition-all">
-                      <p className="font-medium text-gray-800 flex items-center">
-                        <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 text-xs">3</span>
-                        Documento de identificación
-                      </p>
-                    </li>
-
-                    <li className="p-4 bg-white shadow-sm rounded-lg hover:bg-red-50 transition-all">
-                      <p className="font-medium text-gray-800 flex items-center">
-                        <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 text-xs">4</span>
-                        Carta de invitación Terpel
-                      </p>
-                    </li>
-
-                    <li className="p-4 bg-white shadow-sm rounded-lg hover:bg-red-50 transition-all">
-                      <p className="font-medium text-gray-800 flex items-center">
-                        <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 text-xs">5</span>
-                        Firmar carta de aceptación de Terpel
-                      </p>
-                    </li>
-                  </ul>
-
-
+                  <div>
+                    <h4 className="text-gray-800 font-medium mb-4 pb-2 border-b border-gray-100 text-lg">
+                      OTROS REQUISITOS - TERPEL
+                    </h4>
+                    <ul className="space-y-4">
+                      <li className="p-4 bg-white shadow-sm rounded-lg hover:bg-red-50 transition-all">
+                        <p className="font-medium text-gray-800 flex items-center">
+                          <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 text-xs">1</span>
+                          Documento de identificación
+                        </p>
+                      </li>
+                      <li className="p-4 bg-white shadow-sm rounded-lg hover:bg-red-50 transition-all">
+                        <p className="font-medium text-gray-800 flex items-center">
+                          <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 text-xs">2</span>
+                          Carta de invitación Terpel
+                        </p>
+                      </li>
+                      <li className="p-4 bg-white shadow-sm rounded-lg hover:bg-red-50 transition-all">
+                        <p className="font-medium text-gray-800 flex items-center">
+                          <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 text-xs">3</span>
+                          Firmar carta de aceptación de Terpel
+                        </p>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               )}
             </div>

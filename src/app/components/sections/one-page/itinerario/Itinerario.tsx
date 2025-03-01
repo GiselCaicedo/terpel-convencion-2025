@@ -7,28 +7,30 @@ import Image from 'next/image';
 
 // Define interfaces for our props
 interface ItineraryItem {
-    day: number;
+    day: number | string;
     title: string;
     description: string;
+    image: string;
 }
 
 interface ItineraryCardProps {
-    day: number;
+    day: number | string;
     title: string;
     description: string;
+    image: string;
     isReversed: boolean;
     index: number;
 }
 
 // Componente de tarjeta para vista de escritorio (original)
-const DesktopItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, description, isReversed, index }) => {
+const DesktopItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, description, image, isReversed, index }) => {
     const getPositionClasses = (): string => {
         switch (day) {
             case 2:
                 return '-translate-y-12';
             case 3:
                 return 'translate-y-4';
-            case 5:
+            case '4 al 6':
                 return 'translate-y-4';
             default:
                 return '';
@@ -36,27 +38,39 @@ const DesktopItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descri
     };
 
     const imageClasses = `
-        h-32 w-40 object-cover rounded-xl
-        image-hover-effect
+        h-32 w-40 object-cover rounded-xl shadow-lg
+        image-hover-effect transition-transform duration-300 hover:scale-105
     `;
 
     // Modificamos los cardVariants para incluir la posición Y inicial
     const cardVariants = {
-        hidden: (day: number) => ({
-            opacity: 0,
-            x: -50,
-            y: day === 2 ? -48 : day === 3 || day === 5 ? 16 : 0 // Convertimos las clases translate a píxeles
-        }),
-        visible: (day: number) => ({
-            opacity: 1,
-            x: 0,
-            y: day === 2 ? -48 : day === 3 || day === 5 ? 16 : 0,
-            transition: {
-                duration: 0.5,
-                delay: index * 0.2,
-                ease: "easeOut"
-            }
-        })
+        hidden: (day: number | string) => {
+            const yOffset = 
+                day === 2 ? -48 : 
+                day === 3 || day === '4 al 6' ? 16 : 0;
+            
+            return {
+                opacity: 0,
+                x: -50,
+                y: yOffset
+            };
+        },
+        visible: (day: number | string) => {
+            const yOffset = 
+                day === 2 ? -48 : 
+                day === 3 || day === '4 al 6' ? 16 : 0;
+            
+            return {
+                opacity: 1,
+                x: 0,
+                y: yOffset,
+                transition: {
+                    duration: 0.5,
+                    delay: index * 0.2,
+                    ease: "easeOut"
+                }
+            };
+        }
     };
 
     const contentVariants = {
@@ -98,7 +112,9 @@ const DesktopItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descri
                             src="/recursos/location_itinerario.svg"
                             alt="Location"
                             className="w-15 h-15 relative z-20 location-animation"
-                            fill={true}
+                            width={60}
+                            height={60}
+                            priority
                         />
                     </div>
                 </motion.div>
@@ -106,12 +122,16 @@ const DesktopItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descri
                     className="mt-4"
                     variants={contentVariants}
                 >
-                    <Image
-                        src="/recursos/imagen_ejemplo.jpg"
-                        alt={`Day ${day}`}
-                        className={imageClasses}
-                        fill={true}
-                    />
+                    <div className="relative h-32 w-40">
+                        <Image
+                            src={`/itinerario/${image}`}
+                            alt={`Day ${day}`}
+                            className={imageClasses}
+                            fill
+                            sizes="160px"
+                            priority
+                        />
+                    </div>
                 </motion.div>
             </motion.div>
         );
@@ -129,12 +149,16 @@ const DesktopItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descri
             <motion.div
                 variants={contentVariants}
             >
-                <Image
-                    src="/recursos/imagen_ejemplo.jpg"
-                    alt={`Day ${day}`}
-                    className={imageClasses}
-                    fill={true}
-                />
+                <div className="relative h-32 w-40">
+                    <Image
+                        src={`/itinerario/${image}`}
+                        alt={`Day ${day}`}
+                        className={imageClasses}
+                        fill
+                        sizes="160px"
+                        priority
+                    />
+                </div>
             </motion.div>
             <motion.div
                 className="flex justify-center mt-5"
@@ -145,7 +169,9 @@ const DesktopItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descri
                         src="/recursos/location_itinerario.svg"
                         alt="Location"
                         className="w-15 h-15 relative z-20 location-animation"
-                        fill={true}
+                        width={60}
+                        height={60}
+                        priority
                     />
                 </div>
             </motion.div>
@@ -162,10 +188,10 @@ const DesktopItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descri
 };
 
 // Componente de tarjeta para vista de tablet
-const TabletItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, description, isReversed, index }) => {
+const TabletItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, description, image, isReversed, index }) => {
     const imageClasses = `
-        h-40 w-full object-cover rounded-xl
-        image-hover-effect
+        object-cover rounded-xl shadow-lg
+        image-hover-effect transition-transform duration-300 hover:scale-105
     `;
 
     const cardVariants = {
@@ -205,18 +231,22 @@ const TabletItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descrip
             whileInView="visible"
             viewport={{ once: true }}
         >
-            <div className=" bg-opacity-80 rounded-xl p-4 ">
+            <div className="bg-opacity-80 rounded-xl p-4">
                 <div className={`flex flex-row ${isReversed ? 'flex-row-reverse' : ''} items-center gap-4`}>
                     <motion.div
-                        className="w-1/2"
+                        className="w-1/2 relative"
                         variants={contentVariants}
                     >
-                        <Image
-                            src="/recursos/imagen_ejemplo.jpg"
-                            alt={`Day ${day}`}
-                            className={imageClasses}
-                            fill={true}
-                        />
+                        <div className="relative h-48 w-full">
+                            <Image
+                                src={`/itinerario/${image}`}
+                                alt={`Day ${day}`}
+                                className={imageClasses}
+                                fill
+                                sizes="(max-width: 768px) 100vw, 400px"
+                                priority
+                            />
+                        </div>
                     </motion.div>
 
                     <motion.div
@@ -228,7 +258,9 @@ const TabletItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descrip
                                 src="/recursos/location_itinerario.svg"
                                 alt="Location"
                                 className="w-12 h-12 relative z-20 location-animation"
-                                fill={true}
+                                width={48}
+                                height={48}
+                                priority
                             />
                         </div>
 
@@ -289,16 +321,20 @@ const MobileCarousel: React.FC<MobileCarouselProps> = ({ itineraryData }) => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -100 }}
                 transition={{ duration: 0.3 }}
-                className=" bg-opacity-80 rounded-xl p-4 "
+                className="bg-opacity-80 rounded-xl p-4"
             >
                 <div className="flex flex-col items-center gap-4">
                     <div className="w-full">
-                        <Image
-                            src="/recursos/imagen_ejemplo.jpg"
-                            alt={`Day ${itineraryData[activeIndex].day}`}
-                            className="h-40 w-full object-cover rounded-xl image-hover-effect"
-                            fill={true}
-                        />
+                        <div className="relative h-56 w-full">
+                            <Image
+                                src={`/itinerario/${itineraryData[activeIndex].image}`}
+                                alt={`Day ${itineraryData[activeIndex].day}`}
+                                className="object-cover rounded-xl shadow-lg image-hover-effect"
+                                fill
+                                sizes="(max-width: 640px) 100vw, 400px"
+                                priority
+                            />
+                        </div>
                     </div>
 
                     <div className="flex items-center justify-center">
@@ -307,7 +343,9 @@ const MobileCarousel: React.FC<MobileCarouselProps> = ({ itineraryData }) => {
                                 src="/recursos/location_itinerario.svg"
                                 alt="Location"
                                 className="w-12 h-12 relative z-20 location-animation"
-                                fill={true}
+                                width={48}
+                                height={48}
+                                priority
                             />
                         </div>
                     </div>
@@ -360,31 +398,52 @@ const Itinerary: React.FC = () => {
         };
     }, []);
 
+    // Define image paths - make sure these match exactly with your file names
+    const imagePaths = {
+        day1: "Salida_bogotá.png",
+        day2: "Cena Santiago Bernabeu.png",
+        day3: "Toledo_Jornada_Corporativa.png",
+        day4to6: "Globo Marrakech.png",
+        day7: "Wah Show Madrid.png",
+        day8: "Salida_Madrid.png"
+    };
+
     const itineraryData: ItineraryItem[] = [
         {
             day: 1,
-            title: "Vuelo y llegada a Madrid",
-            description: "Aeropuerto, Traslado al hotel",
+            title: "Salida desde Bogotá hacia Madrid",
+            description: "",
+            image: imagePaths.day1
         },
         {
             day: 2,
-            title: "Tour Madrid",
-            description: "Tiempo libre",
+            title: "Cena estadio Santiago Bernabéu",
+            description: "",
+            image: imagePaths.day2
         },
         {
             day: 3,
-            title: "Vuelo y llegada a Marrakech",
-            description: "Aeropuerto, Traslado al hotel",
-        },
-        {
-            day: 4,
-            title: "Tour Marrakech",
-            description: "Tarde libre",
-        },
-        {
-            day: 5,
-            title: "Ifrane - Beni Mellal - Marrakech",
+            title: "Toledo jornada corporativa",
             description: "",
+            image: imagePaths.day3
+        },
+        {
+            day: '4 al 6',
+            title: "Vuelo a Marrakech",
+            description: "Vuelo en globo. Cena de premiación Desierto de Agafay",
+            image: imagePaths.day4to6
+        },
+        {
+            day: 7,
+            title: "Show Wah - Madrid",
+            description: "",
+            image: imagePaths.day7
+        },
+        {
+            day: 8,
+            title: "Salida desde Madrid hacia Bogotá",
+            description: "",
+            image: imagePaths.day8
         }
     ];
 
@@ -433,7 +492,7 @@ const Itinerary: React.FC = () => {
                         <div className="max-w-4xl mx-auto">
                             {itineraryData.map((item, index) => (
                                 <TabletItineraryCard
-                                    key={item.day}
+                                    key={index}
                                     {...item}
                                     isReversed={index % 2 !== 0}
                                     index={index}
@@ -461,7 +520,7 @@ const Itinerary: React.FC = () => {
                             <div className="flex justify-between items-center relative">
                                 {itineraryData.map((item, index) => (
                                     <DesktopItineraryCard
-                                        key={item.day}
+                                        key={index}
                                         {...item}
                                         isReversed={index % 2 !== 0}
                                         index={index}
