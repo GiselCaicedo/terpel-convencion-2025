@@ -113,9 +113,9 @@ export default function InputField({
       {label && (
         <label 
           htmlFor={fieldId} 
-          className={`block text-gray-700 font-medium mb-2 ${disabled ? 'text-gray-500' : ''}`}
+          className={`block text-gray-700 font-terpel font-normal mb-2 ${disabled ? 'text-gray-500' : ''}`}
         >
-          {label} {showRequiredIndicator && <span className="text-red-600">*</span>}
+          {label} {showRequiredIndicator && <span className="text-terpel-red">*</span>}
         </label>
       )}
       
@@ -184,7 +184,7 @@ export default function InputField({
       
       {/* Mensaje de error */}
       {error && (
-        <p id={errorId} className="mt-1 text-sm text-red-600">
+        <p id={errorId} className="mt-1 text-sm text-terpel-red">
           {error}
         </p>
       )}

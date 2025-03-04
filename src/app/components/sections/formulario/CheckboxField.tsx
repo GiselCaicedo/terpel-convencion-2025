@@ -30,19 +30,19 @@ export default function CheckboxField({
                         checked={checked}
                         onChange={onChange}
                         required={required}
-                        className={`h-4 w-4 ${error ? 'border-red-500' : 'border-gray-300'} rounded focus:ring-red-500 text-red-600`}
+                        className={`h-4 w-4 ${error ? 'border-red-500' : 'border-gray-300'} rounded focus:ring-red-500 text-terpel-red`}
                     />
                 </div>
                 <div className="ml-2 text-sm">
                     <label
                         htmlFor={name}
-                        className={`${error ? 'text-red-600' : 'text-gray-700'} font-medium cursor-pointer`}
+                        className={`${error ? 'text-terpel-red' : 'text-gray-700'} font-terpel font-normal cursor-pointer`}
                         onClick={onClick}
                     >
-                        {label} {required && <span className="text-red-600">*</span>}
+                        {label} {required && <span className="text-terpel-red">*</span>}
                     </label>
                     {error && (
-                        <p className="mt-1 text-sm text-red-600">{error}</p>
+                        <p className="mt-1 text-sm text-terpel-red">{error}</p>
                     )}
                 </div>
             </div>

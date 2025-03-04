@@ -1,5 +1,5 @@
 'use client';
-import React, { ReactNode, useEffect } from 'react';
+import React, { ReactNode } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import Banner from './components/sections/one-page/home/portada/Banner';
@@ -13,7 +13,6 @@ import Formulario from './components/sections/one-page/form/Formulario';
 import DetallesInicio from './components/sections/one-page/details/DetallesInicio';
 import ImageGrid from './components/sections/one-page/galeria/Images';
 
-// Define the props interface for the FadeInSection component
 interface FadeInSectionProps {
   children: ReactNode;
   delay?: number;
@@ -37,10 +36,6 @@ const FadeInSection: React.FC<FadeInSectionProps> = ({ children, delay = 0, id }
 
 
 export default function Page() {
-  // Add debugging to check component rendering
-  useEffect(() => {
-    console.log('Page component mounted');
-  }, []);
 
   // Variantes de animación para los títulos
   const titleVariants = {
@@ -110,7 +105,7 @@ export default function Page() {
           <div className="container mx-auto px-4 pb-20">
             <div className="text-center">
               <motion.h2
-                className="text-3xl md:text-4xl lg:text-5xl font-bold text-red-600 tracking-wide"
+                className="text-3xl md:text-4xl lg:text-5xl font-bold text-terpel-red tracking-wide"
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
@@ -125,7 +120,7 @@ export default function Page() {
                 viewport={{ once: true }}
                 variants={subtitleVariants}
               >
-                <span className="text-3xl md:text-4xl lg:text-5xl font-bold text-red-600 tracking-wide">
+                <span className="text-3xl md:text-4xl lg:text-5xl font-bold text-terpel-red tracking-wide">
                   &ldquo;LA ENERGÍA SIN LÍMITES&rdquo;
                 </span>
                 <motion.div

@@ -1,18 +1,54 @@
-'use client';
-import React from 'react';
+// Add required brand colors to Tailwind config at project level
+    // This is for reference only - these should be added to your tailwind.config.js
+    /*
+    module.exports = {
+      theme: {
+        extend: {
+          colors: {
+            'terpel-red': '#FF0000', // Replace with actual red color code
+            'terpel-white': '#FFFFFF',
+            'terpel-yellow': '#FFD100', // Replace with actual yellow color code
+            'terpel-yellow-2': '#FFAA00', // Replace with actual secondary yellow color code
+          },
+        },
+      },
+    }
+    */'use client';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 // Define the interface for image data
 interface ImageItem {
-  id: number;
-  src: string;
-  alt: string;
-  title: string;
-  description: string;
+    id: number;
+    src: string;
+    alt: string;
+    title: string;
+    description: string;
 }
 
 export default function ImageGrid() {
+    // State to track if we're on mobile
+    const [isMobile, setIsMobile] = useState(false);
+    // State for carousel
+    const [currentSlide, setCurrentSlide] = useState(0);
+
+    // Check window size on component mount and resize
+    useEffect(() => {
+        const checkIfMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        // Initial check
+        checkIfMobile();
+
+        // Add event listener
+        window.addEventListener('resize', checkIfMobile);
+
+        // Cleanup
+        return () => window.removeEventListener('resize', checkIfMobile);
+    }, []);
+
     // Estructura de datos para las imágenes con sus títulos y descripciones
     const imageData: ImageItem[] = [
         {
@@ -54,14 +90,14 @@ export default function ImageGrid() {
             id: 6,
             src: "/galeria/Toledo_Jornada_Corporativa.png",
             alt: "Toledo Jornada corporativa",
-            title: "Toledo Jornada corporativa",
+            title: "Jornada Corporativa - Toledo",
             description: "Traslado a una de las ciudades más antiguas de España, donde visitaremos un parque temático y tendremos un viaje en el tiempo a otra época llena de magia, aventura y descubrimiento.​"
         },
         {
             id: 7,
             src: "/galeria/Artista-Internacional.png",
             alt: "Artista Internacional",
-            title: "",
+            title: "Artista Internacional",
             description: ""
         },
         {
@@ -150,63 +186,126 @@ export default function ImageGrid() {
         }
     ];
 
-    // Agrupamos las imágenes para la disposición en la cuadrícula
     const madridImages = imageData.slice(0, 7);
     const marrakechImages = imageData.slice(7, 19);
 
+    const allImages = [...madridImages, ...marrakechImages];
+
+    const nextSlide = () => {
+        setCurrentSlide((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
+    };
+
+    const prevSlide = () => {
+        setCurrentSlide((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
+    };
+
+    if (isMobile) {
+        return (
+            <div className="relative w-full bg-black pb-6">
+                <div className="overflow-hidden shadow-xl">
+                    <div
+                        className="flex transition-transform duration-500 ease-out"
+                        style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                    >
+                        {allImages.map((image) => (
+                            <div key={image.id} className="w-full flex-shrink-0">
+                                <div className="relative w-full aspect-square md:aspect-video">
+                                    <Image
+                                        src={image.src}
+                                        alt={image.alt}
+                                        fill
+                                        className="object-cover"
+                                    />
+
+                                    {(image.title || image.description) && (
+                                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/70 to-transparent p-4">
+                                            {image.title && (
+                                                <h3 className="text-terpel-yellow text-lg font-terpel font-bold mb-2">
+                                                    {image.title}
+                                                </h3>
+                                            )}
+                                            {image.description && (
+                                                <p className="text-terpel-white text-sm leading-snug">
+                                                    {image.description}
+                                                </p>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <button
+                    onClick={prevSlide}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-terpel-white w-10 h-10 rounded-full flex items-center justify-center z-10 shadow-lg transition-all duration-300"
+                    aria-label="Previous slide"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <button
+                    onClick={nextSlide}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-terpel-white w-10 h-10 rounded-full flex items-center justify-center z-10 shadow-lg transition-all duration-300"
+                    aria-label="Next slide"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+
+                <div className="mt-4 flex flex-col items-center">
+                    <div className="text-terpel-white text-sm mb-2">
+                        <span className="font-terpel font-bold text-terpel-yellow">{currentSlide + 1}</span> / {allImages.length}
+                    </div>
+
+                    <div className="flex justify-center items-center">
+                        {currentSlide > 1 && (
+                            <div className="mx-1 h-2 w-8 bg-terpel-white opacity-60"></div>
+                        )}
+
+                        {currentSlide > 0 && (
+                            <button
+                                onClick={() => setCurrentSlide(currentSlide - 1)}
+                                className="h-2 w-8 mx-1 rounded-full bg-terpel-white opacity-60 hover:opacity-100 transition-all duration-300"
+                                aria-label={`Go to slide ${currentSlide}`}
+                            />
+                        )}
+
+                        <button
+                            className="h-2 w-12 mx-1 rounded-full bg-terpel-yellow transition-all duration-300"
+                            aria-label={`Current slide ${currentSlide + 1}`}
+                            disabled
+                        />
+
+                        {currentSlide < allImages.length - 1 && (
+                            <button
+                                onClick={() => setCurrentSlide(currentSlide + 1)}
+                                className="h-2 w-8 mx-1 rounded-full bg-terpel-white opacity-60 hover:opacity-100 transition-all duration-300"
+                                aria-label={`Go to slide ${currentSlide + 2}`}
+                            />
+                        )}
+
+                        {currentSlide < allImages.length - 2 && (
+                            <div className="mx-1 h-2 w-8 bg-terpel-white opacity-60"></div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="grid grid-cols-1 gap-4">
-            {/* Sección de Madrid */}
-            <FeaturedImageWithDescription image={madridImages[0]} />
-            
-            <motion.div
-                className="grid grid-cols-3 gap-2"
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-            >
-                {madridImages.slice(1, 4).map((image) => (
-                    <ImageWithHover key={image.id} image={image} />
-                ))}
-            </motion.div>
-
             <div className="grid grid-cols-2 gap-2">
-                {madridImages.slice(4, 6).map((image) => (
-                    <FeaturedImageWithDescription key={image.id} image={image} />
-                ))}
-            </div>
-
-            {/* Imagen 7 si está disponible */}
-            {madridImages[6] && madridImages[6].src && (
-                <ImageWithHover image={madridImages[6]} />
-            )}
-
-            {/* Sección de Marrakech */}
-            <FeaturedImageWithDescription image={marrakechImages[0]} />
-            
-            <motion.div
-                className="grid grid-cols-3 gap-2"
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-            >
-                {marrakechImages.slice(1, 4).map((image) => (
-                    <ImageWithHover key={image.id} image={image} />
-                ))}
-            </motion.div>
-
-            <div className="grid grid-cols-2 gap-2">
-                {marrakechImages.slice(4, 6).map((image) => (
-                    <FeaturedImageWithDescription key={image.id} image={image} />
-                ))}
-            </div>
-
-            <div className="grid grid-cols-2 gap-2">
-                {marrakechImages.slice(6, 8).map((image) => (
-                    <FeaturedImageWithDescription key={image.id} image={image} />
-                ))}
+                <div className="aspect-video">
+                    <FeaturedImageWithDescription image={madridImages[0]} />
+                </div>
+                <div className="aspect-video">
+                    <FeaturedImageWithDescription image={madridImages[1]} />
+                </div>
             </div>
 
             <motion.div
@@ -216,28 +315,90 @@ export default function ImageGrid() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
             >
-                {marrakechImages.slice(8, 11).map((image) => (
-                    <ImageWithHover key={image.id} image={image} />
+                {madridImages.slice(2, 5).map((image) => (
+                    <div key={image.id} className="aspect-square">
+                        <ImageWithHover image={image} />
+                    </div>
                 ))}
             </motion.div>
 
-            <FeaturedImageWithDescription image={marrakechImages[11]} />
+            <div className="grid grid-cols-2 gap-2">
+                <div className="aspect-video">
+                    <FeaturedImageWithDescription image={madridImages[5]} />
+                </div>
+                <div className="aspect-video">
+                    <FeaturedImageWithDescription image={madridImages[6]} />
+                </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+                <div className="aspect-video">
+                    <FeaturedImageWithDescription image={marrakechImages[0]} />
+                </div>
+                <div className="aspect-video">
+                    <FeaturedImageWithDescription image={marrakechImages[1]} />
+                </div>
+            </div>
+
+            <motion.div
+                className="grid grid-cols-3 gap-2"
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+            >
+                {marrakechImages.slice(2, 5).map((image) => (
+                    <div key={image.id} className="aspect-square">
+                        <ImageWithHover image={image} />
+                    </div>
+                ))}
+            </motion.div>
+
+            <div className="grid grid-cols-2 gap-2">
+                <div className="aspect-video">
+                    <FeaturedImageWithDescription image={marrakechImages[5]} />
+                </div>
+                <div className="aspect-video">
+                    <FeaturedImageWithDescription image={marrakechImages[6]} />
+                </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+                <div className="aspect-video">
+                    <FeaturedImageWithDescription image={marrakechImages[7]} />
+                </div>
+                <div className="aspect-video">
+                    <FeaturedImageWithDescription image={marrakechImages[8]} />
+                </div>
+            </div>
+
+            <motion.div
+                className="grid grid-cols-3 gap-2"
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+            >
+                {marrakechImages.slice(9, 12).map((image) => (
+                    <div key={image.id} className="aspect-square">
+                        <ImageWithHover image={image} />
+                    </div>
+                ))}
+            </motion.div>
         </div>
     );
 }
 
-// Props interface for components
 interface ImageComponentProps {
     image: ImageItem;
 }
 
-// Componente para imagen con efecto hover
 const ImageWithHover = ({ image }: ImageComponentProps) => {
     if (!image || !image.src) return null;
-    
+
     return (
         <motion.div
-            className="w-full relative aspect-square"
+            className="w-full h-full relative"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
         >
@@ -249,7 +410,7 @@ const ImageWithHover = ({ image }: ImageComponentProps) => {
             />
             {image.title && (
                 <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 p-2">
-                    <h3 className="text-yellow-400 text-sm font-bold">
+                    <h3 className="text-yellow-400 text-sm font-terpel font-bold">
                         {image.title}
                     </h3>
                 </div>
@@ -258,12 +419,11 @@ const ImageWithHover = ({ image }: ImageComponentProps) => {
     );
 };
 
-// Componente para imagen destacada con descripción
 const FeaturedImageWithDescription = ({ image }: ImageComponentProps) => {
     if (!image || !image.src) return null;
-    
+
     return (
-        <div className="relative w-full overflow-hidden shadow-lg aspect-video">
+        <div className="relative w-full h-full overflow-hidden shadow-lg">
             <motion.div
                 className="w-full h-full relative"
                 initial={{ opacity: 0 }}
@@ -288,7 +448,7 @@ const FeaturedImageWithDescription = ({ image }: ImageComponentProps) => {
                     transition={{ duration: 0.5, delay: 0.2 }}
                 >
                     {image.title && (
-                        <h2 className="text-yellow-400 text-xl font-bold mb-1">
+                        <h2 className="text-yellow-400 text-xl font-terpel font-bold mb-1">
                             {image.title}
                         </h2>
                     )}

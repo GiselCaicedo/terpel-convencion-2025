@@ -52,8 +52,8 @@ export default function SelectField<T extends BaseOption>({
 
   return (
     <div className="mb-4">
-      <label htmlFor={name} className="block text-gray-700 font-medium mb-2">
-        {label} {required && <span className="text-red-600">*</span>}
+      <label htmlFor={name} className="block text-gray-700 font-terpel font-normal mb-2">
+        {label} {required && <span className="text-terpel-red">*</span>}
       </label>
       <select
         id={name}
@@ -76,7 +76,7 @@ export default function SelectField<T extends BaseOption>({
         ))}
       </select>
       {error && (
-        <p className="mt-1 text-sm text-red-600">{error}</p>
+        <p className="mt-1 text-sm text-terpel-red">{error}</p>
       )}
     </div>
   );

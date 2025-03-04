@@ -21,7 +21,7 @@ export default function DateField({
 }: DateFieldProps) {
     return (
         <div className="mb-4">
-            <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor={name} className="block text-sm font-terpel font-normal text-gray-700 mb-1">
                 {label} {required && <span className="text-red-500">*</span>}
             </label>
             <input
@@ -36,7 +36,7 @@ export default function DateField({
                 className={`w-full px-3 py-2 border ${error ? 'border-red-500 bg-red-50' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 ${disabled ? 'bg-gray-100 cursor-not-allowed' : ''}`}
             />
             {error && (
-                <p className="mt-1 text-sm text-red-600">{error}</p>
+                <p className="mt-1 text-sm text-terpel-red">{error}</p>
             )}
         </div>
     );

@@ -8,8 +8,8 @@ const StatCard = ({ icon, number, text }) => (
       alt={text}
       className="h-10 w-auto mb-4"
     />
-    <span className="text-4xl font-bold mb-2">{number}</span>
-    <span className="text-sm font-light uppercase">{text}</span>
+    <span className="text-4xl font-bold mb-2 text-black dark:text-white" style={{ color: 'black' }}>{number}</span>
+    <span className="text-sm font-medium uppercase text-black dark:text-white" style={{ color: 'black' }}>{text}</span>
   </div>
 )
 
@@ -39,7 +39,7 @@ const Detalles = () => {
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div className="bg-red-600 rounded-lg p-8 text-white text-center">
+        <div className="bg-terpel-red rounded-lg p-8 text-white text-center">
           <img
             src="/recursos/users_icon.svg"
             alt="Users"

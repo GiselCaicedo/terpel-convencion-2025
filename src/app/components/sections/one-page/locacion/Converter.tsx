@@ -168,8 +168,8 @@ const CurrencyConverter = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-red-600 mb-4 tracking-tight">
-            Convertidor de Moneda
+          <h2 className="text-4xl font-bold text-terpel-red mb-4 tracking-tight">
+            CONVERTIDOR DE MONEDA
           </h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             Realiza conversiones entre EUR, COP y MAD de manera rápida y sencilla
@@ -179,15 +179,15 @@ const CurrencyConverter = () => {
         {/* Error Alert */}
         {errorMessage && (
           <div className="mb-8 mx-auto max-w-3xl">
-            <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r">
+            <div className="bg-red-100 border-l-4 border-red-500 p-4 rounded-r">
               <div className="flex">
                 <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                  <svg className="h-5 w-5 text-terpel-red" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                   </svg>
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm text-red-700">{errorMessage}</p>
+                  <p className="text-sm text-terpel-red">{errorMessage}</p>
                 </div>
               </div>
             </div>
@@ -201,7 +201,7 @@ const CurrencyConverter = () => {
             <div className="flex gap-4 items-center">
               {/* Left Currency */}
               <div className="flex-1">
-                <div className="bg-gradient-to-r from-red-600 to-red-500 text-white p-4 rounded-xl flex items-center justify-between mb-2 shadow-sm">
+                <div className="bg-terpel-red text-white p-4 rounded-xl flex items-center justify-between mb-2 shadow-sm">
                   <span className="font-semibold text-lg">{currencies.from1.type}</span>
                   <Image
                     src={`/recursos/${getCurrencyFlag(currencies.from1.type)}.png`}
@@ -226,14 +226,14 @@ const CurrencyConverter = () => {
               <div className="flex flex-col gap-3">
                 <button
                   onClick={() => swapCurrencyTypes('1')}
-                  className="p-3 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors duration-200"
+                  className="p-3 text-terpel-red hover:text-terpel-red rounded-full transition-colors duration-200"
                   aria-label="Cambiar tipo de moneda"
                 >
                   <ArrowUpDown className="w-6 h-6" />
                 </button>
                 <button
                   onClick={() => swapCurrencyValues('1')}
-                  className="p-3 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors duration-200"
+                  className="p-3 text-terpel-red hover:text-terpel-red rounded-full transition-colors duration-200"
                   aria-label="Intercambiar valores"
                 >
                   <ArrowLeftRight className="w-6 h-6" />
@@ -242,7 +242,7 @@ const CurrencyConverter = () => {
 
               {/* Right Currency */}
               <div className="flex-1">
-                <div className="bg-gradient-to-r from-red-600 to-red-500 text-white p-4 rounded-xl flex items-center justify-between mb-2 shadow-sm">
+                <div className="bg-terpel-red text-white p-4 rounded-xl flex items-center justify-between mb-2 shadow-sm">
                   <span className="font-semibold text-lg">{currencies.from1.targetType}</span>
                   <Image
                     src={`/recursos/${getCurrencyFlag(currencies.from1.targetType)}.png`}
@@ -268,7 +268,7 @@ const CurrencyConverter = () => {
             <div className="flex gap-4 items-center">
               {/* Left Currency */}
               <div className="flex-1">
-                <div className="bg-gradient-to-r from-red-600 to-red-500 text-white p-4 rounded-xl flex items-center justify-between mb-2 shadow-sm">
+                <div className="bg-terpel-red text-white p-4 rounded-xl flex items-center justify-between mb-2 shadow-sm">
                   <span className="font-semibold text-lg">{currencies.from2.type}</span>
                   <Image
                     src={`/recursos/${getCurrencyFlag(currencies.from2.type)}.png`}
@@ -293,14 +293,14 @@ const CurrencyConverter = () => {
               <div className="flex flex-col gap-3">
                 <button
                   onClick={() => swapCurrencyTypes('2')}
-                  className="p-3 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors duration-200"
+                  className="p-3 text-terpel-red hover:text-terpel-red rounded-full transition-colors duration-200"
                   aria-label="Cambiar tipo de moneda"
                 >
                   <ArrowUpDown className="w-6 h-6" />
                 </button>
                 <button
                   onClick={() => swapCurrencyValues('2')}
-                  className="p-3 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors duration-200"
+                  className="p-3 text-terpel-red hover:text-terpel-red rounded-full transition-colors duration-200"
                   aria-label="Intercambiar valores"
                 >
                   <ArrowLeftRight className="w-6 h-6" />
@@ -309,7 +309,7 @@ const CurrencyConverter = () => {
 
               {/* Right Currency */}
               <div className="flex-1">
-                <div className="bg-gradient-to-r from-red-600 to-red-500 text-white p-4 rounded-xl flex items-center justify-between mb-2 shadow-sm">
+                <div className="bg-terpel-red text-white p-4 rounded-xl flex items-center justify-between mb-2 shadow-sm">
                   <span className="font-semibold text-lg">{currencies.from2.targetType}</span>
                   <Image
                     src={`/recursos/${getCurrencyFlag(currencies.from2.targetType)}.png`}

@@ -34,41 +34,57 @@ interface ApiError {
 interface Regional {
     id: string;
     nombre: string;
+    value?: string;
+    label?: string;
 }
 
 interface JefeZona {
     id: string;
     nombre: string;
+    value?: string;
+    label?: string;
 }
 
 interface Departamento {
     id: string;
     nombre: string;
+    value?: string;
+    label?: string;
 }
 
 interface Ciudad {
     id: string;
     nombre: string;
+    value?: string;
+    label?: string;
 }
 
 interface FormaPago {
     id: string;
     nombre: string;
+    value?: string;
+    label?: string;
 }
 
 interface TipoDocumento {
     id: string;
     nombre: string;
+    value?: string;
+    label?: string;
 }
 
 interface Acomodacion {
     id: string;
     nombre: string;
+    value?: string;
+    label?: string;
 }
 
 interface Extension {
     id: string;
     nombre: string;
+    value?: string;
+    label?: string;
 }
 
 interface DataLists {
@@ -76,6 +92,7 @@ interface DataLists {
     jefes_zona: JefeZona[];
     departamentos: Departamento[];
     ciudades: Ciudad[];
+    acompanante_ciudades?: Ciudad[];
     formas_pago: FormaPago[];
     tipos_documento: TipoDocumento[];
     acomodaciones: Acomodacion[];
@@ -97,6 +114,9 @@ interface AcompananteData {
     imagen_pasaporte: File | null;
     solicitud_especial?: string;
     restriccion_alimentaria?: string;
+    departamento_id: string;
+    ciudad_id: string;
+    direccion: string;
 }
 
 interface FormDataType {
@@ -110,6 +130,7 @@ interface FormDataType {
     segundo_apellido?: string;
     departamento_id: string;
     ciudad_id: string;
+    direccion: string;
     email: string;
     celular: string;
     acomodacion_id: string;
@@ -143,6 +164,7 @@ export default function RegistrationForm() {
         segundo_apellido: '',
         departamento_id: '',
         ciudad_id: '',
+        direccion: '',
         email: '',
         celular: '',
         acomodacion_id: '',
@@ -175,7 +197,10 @@ export default function RegistrationForm() {
         fecha_caducidad_pasaporte: '',
         imagen_pasaporte: '',
         solicitud_especial: '',
-        restriccion_alimentaria: ''
+        restriccion_alimentaria: '',
+        departamento_id: '',
+        ciudad_id: '',
+        direccion: ''
     };
 
     // Estados principales
@@ -256,7 +281,6 @@ export default function RegistrationForm() {
 
 
 
-    // Cargar ciudades cuando cambia el departamento
     useEffect(() => {
         if (formData.departamento_id) {
             fetchCiudades(formData.departamento_id)
@@ -265,9 +289,22 @@ export default function RegistrationForm() {
         }
     }, [formData.departamento_id]);
 
-    // Add these functions at the top of your component, after all the state definitions
 
-    // Function to save form data to localStorage
+    useEffect(() => {
+        if (acompanante.departamento_id) {
+            fetchCiudades(acompanante.departamento_id)
+                .then(ciudades => {
+                    setDataLists(prev => ({ ...prev, acompanante_ciudades: ciudades }));
+                })
+                .catch(() => {
+                    setDataLists(prev => ({ ...prev, acompanante_ciudades: [] }));
+                });
+        } else {
+            setDataLists(prev => ({ ...prev, acompanante_ciudades: [] }));
+        }
+    }, [acompanante.departamento_id]);
+
+
     const saveFormDataToLocalStorage = useCallback(() => {
         try {
             localStorage.setItem('registrationFormData', JSON.stringify(formData));
@@ -355,7 +392,7 @@ export default function RegistrationForm() {
                     formData.celular.replace(/\D/g, '').length <= 10
                 );
             case 2: // Dirección
-                return !!(formData.departamento_id && formData.ciudad_id);
+                return !!(formData.departamento_id && formData.ciudad_id && formData.direccion);
             case 3: // Pasaporte
                 return !!(
                     formData.numero_pasaporte &&
@@ -378,7 +415,11 @@ export default function RegistrationForm() {
                         acompanante.numero_pasaporte &&
                         acompanante.fecha_emision_pasaporte &&
                         acompanante.fecha_caducidad_pasaporte &&
-                        acompanante.imagen_pasaporte
+                        acompanante.imagen_pasaporte &&
+                        acompanante.departamento_id &&
+                        acompanante.ciudad_id &&
+                        acompanante.direccion
+
                     );
                 }
                 return true;
@@ -475,7 +516,6 @@ export default function RegistrationForm() {
         if (type === 'file') {
             const fileInput = e.target as HTMLInputElement;
             if (fileInput.files && fileInput.files.length > 0) {
-
                 const filename = fileInput.files[0].name;
                 setAcompanante(prev => ({ ...prev, [name]: filename }));
                 validateField(name, filename);
@@ -485,8 +525,9 @@ export default function RegistrationForm() {
             setAcompanante(prev => ({ ...prev, [name]: checkboxInput.checked }));
             validateField(name, String(checkboxInput.checked));
         } else {
-            setAcompanante(prev => ({ ...prev, [name]: value }));
-            validateField(name, value);
+            const safeValue = value ?? '';
+            setAcompanante(prev => ({ ...prev, [name]: safeValue }));
+            validateField(name, safeValue);
         }
     }, [validateField]);
 
@@ -564,6 +605,10 @@ export default function RegistrationForm() {
                     errors.ciudad_id = 'La ciudad es obligatoria';
                     isValid = false;
                 }
+                if (!formData.direccion) {
+                    errors.direccion = 'La dirección es obligatoria';
+                    isValid = false;
+                }
                 break;
 
             case 3: // Pasaporte
@@ -639,6 +684,18 @@ export default function RegistrationForm() {
                     }
                     if (!acompanante.imagen_pasaporte) {
                         errors['acompanante.imagen_pasaporte'] = 'La imagen del pasaporte es obligatoria';
+                        isValid = false;
+                    }
+                    if (!acompanante.departamento_id) {
+                        errors['acompanante.departamento_id'] = 'El departamento del acompañante es obligatorio';
+                        isValid = false;
+                    }
+                    if (!acompanante.ciudad_id) {
+                        errors['acompanante.ciudad_id'] = 'La ciudad del acompañante es obligatoria';
+                        isValid = false;
+                    }
+                    if (!acompanante.direccion) {
+                        errors['acompanante.direccion'] = 'La dirección del acompañante es obligatoria';
                         isValid = false;
                     }
                 }
@@ -799,7 +856,7 @@ export default function RegistrationForm() {
                         transition={{ duration: 0.3 }}
                         className="space-y-6"
                     >
-                        <h2 className="text-xl font-semibold text-gray-800">Información General</h2>
+                        <h2 className="text-xl font-terpel font-normal text-gray-800">Información General</h2>
                         <p className="text-gray-600">Complete la información básica sobre su EDS y regional.</p>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -853,7 +910,7 @@ export default function RegistrationForm() {
                         transition={{ duration: 0.3 }}
                         className="space-y-6"
                     >
-                        <h2 className="text-xl font-semibold text-gray-800">Información Personal</h2>
+                        <h2 className="text-xl font-terpel font-normal text-gray-800">Información Personal</h2>
                         <p className="text-gray-600">Complete sus datos personales.</p>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -953,7 +1010,7 @@ export default function RegistrationForm() {
                         transition={{ duration: 0.3 }}
                         className="space-y-6"
                     >
-                        <h2 className="text-xl font-semibold text-gray-800">Información de Residencia</h2>
+                        <h2 className="text-xl font-terpel font-normal text-gray-800">Información de Residencia</h2>
                         <p className="text-gray-600">Indique su lugar de residencia.</p>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -976,6 +1033,16 @@ export default function RegistrationForm() {
                                 disabled={!formData.departamento_id}
                                 error={getFieldError('ciudad_id')}
                             />
+                            <div className="md:col-span-2 ">
+                                <InputField
+                                    label="Dirección"
+                                    name="direccion"
+                                    value={formData.direccion || ''}
+                                    onChange={handleInputChange}
+                                    required
+                                    error={getFieldError('direccion')}
+                                />
+                            </div>
                         </div>
                     </motion.div>
                 );
@@ -991,7 +1058,7 @@ export default function RegistrationForm() {
                         transition={{ duration: 0.3 }}
                         className="space-y-6"
                     >
-                        <h2 className="text-xl font-semibold text-gray-800">Información de Pasaporte</h2>
+                        <h2 className="text-xl font-terpel font-normal text-gray-800">Información de Pasaporte</h2>
                         <p className="text-gray-600">Complete los datos de su pasaporte.</p>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1046,7 +1113,7 @@ export default function RegistrationForm() {
                         transition={{ duration: 0.3 }}
                         className="space-y-6"
                     >
-                        <h2 className="text-xl font-semibold text-gray-800">Preferencias y Solicitudes</h2>
+                        <h2 className="text-xl font-terpel font-normal text-gray-800">Preferencias y Solicitudes</h2>
                         <p className="text-gray-600">Seleccione sus preferencias y si viajará con acompañante.</p>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1104,7 +1171,7 @@ export default function RegistrationForm() {
                             {/* Campos del acompañante - Solo mostrar si tiene_acompanante es true */}
                             {tiene_acompanante && (
                                 <div className="md:col-span-2 mt-6 border-t pt-6">
-                                    <h3 className="text-lg font-semibold mb-4">Información del Acompañante</h3>
+                                    <h3 className="text-lg font-terpel font-normal mb-4">Información del Acompañante</h3>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <InputField
                                             label="Primer Nombre"
@@ -1194,6 +1261,36 @@ export default function RegistrationForm() {
                                             required
                                             error={getFieldError('acompanante.fecha_caducidad_pasaporte')}
                                         />
+
+                                        <SelectField
+                                            label="Departamento"
+                                            name="departamento_id"
+                                            options={dataLists.departamentos}
+                                            value={acompanante.departamento_id ?? ''}
+                                            onChange={handleAcompananteChange}
+                                            required
+                                            error={getFieldError('acompanante.departamento_id')}
+                                        />
+                                        <SelectField
+                                            label="Ciudad"
+                                            name="ciudad_id"
+                                            options={dataLists.acompanante_ciudades || []}
+                                            value={acompanante.ciudad_id ?? ''}
+                                            onChange={handleAcompananteChange}
+                                            required
+                                            disabled={!acompanante.departamento_id}
+                                            error={getFieldError('acompanante.ciudad_id')}
+                                        />
+                                        <div className="md:col-span-2">
+                                            <InputField
+                                                label="Dirección"
+                                                name="direccion"
+                                                value={acompanante.direccion ?? ''}
+                                                onChange={handleAcompananteChange}
+                                                required
+                                                error={getFieldError('acompanante.direccion')}
+                                            />
+                                        </div>
                                         <div className="md:col-span-2">
                                             <FileUploadField
                                                 label="Imagen del Pasaporte"
@@ -1237,52 +1334,224 @@ export default function RegistrationForm() {
                         transition={{ duration: 0.3 }}
                         className="space-y-6"
                     >
-                        <h2 className="text-xl font-semibold text-gray-800">Confirmación</h2>
+                        <h2 className="text-xl font-terpel font-normal text-gray-800">Confirmación</h2>
                         <p className="text-gray-600">Revise sus datos y confirme el registro.</p>
 
-                        <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 space-y-4">
-                            <h3 className="text-lg font-medium text-gray-800">Resumen de registro</h3>
+                        <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                            <h3 className="text-lg font-terpel font-normal text-gray-800 mb-4">Resumen de registro</h3>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
-                                <div>
-                                    <span className="font-medium">Nombre completo:</span>
-                                    <span className="ml-2">{`${formData.primer_nombre} ${formData.segundo_nombre || ''} ${formData.primer_apellido} ${formData.segundo_apellido || ''}`.trim()}</span>
+                            <div className="overflow-hidden border rounded-lg">
+                                {/* Información General */}
+                                <div className="bg-gray-100 px-4 py-2">
+                                    <h4 className="font-terpel font-normal text-gray-700">Información General</h4>
                                 </div>
-                                <div>
-                                    <span className="font-medium">EDS:</span>
-                                    <span className="ml-2">{formData.name_eds}</span>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Regional:</div>
+                                    <div className="px-4 py-2">
+                                        {dataLists.regionales.find(item => item.value == formData.regional_id)?.label || ''}
+                                    </div>
                                 </div>
-                                <div>
-                                    <span className="font-medium">Email:</span>
-                                    <span className="ml-2">{formData.email}</span>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Jefe de Zona:</div>
+                                    <div className="px-4 py-2">
+                                        {dataLists.jefes_zona.find(item => item.value == formData.jefe_de_zona_id)?.label || ''}
+                                    </div>
                                 </div>
-                                <div>
-                                    <span className="font-medium">Celular:</span>
-                                    <span className="ml-2">{formData.celular}</span>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Nombre EDS:</div>
+                                    <div className="px-4 py-2">{formData.name_eds}</div>
                                 </div>
-                                <div>
-                                    <span className="font-medium">Pasaporte:</span>
-                                    <span className="ml-2">{formData.numero_pasaporte}</span>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Razón Social:</div>
+                                    <div className="px-4 py-2">{formData.razon_social}</div>
                                 </div>
-                                <div>
-                                    <span className="font-medium">Acomodación:</span>
-                                    <span className="ml-2">
-                                        {dataLists.acomodaciones.find(item => item.id === formData.acomodacion_id)?.nombre || ''}
-                                    </span>                                </div>
+
+                                {/* Información Personal */}
+                                <div className="bg-gray-100 px-4 py-2">
+                                    <h4 className="font-terpel font-normal text-gray-700">Información Personal</h4>
+                                </div>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Tipo de Documento:</div>
+                                    <div className="px-4 py-2">
+                                        {dataLists.tipos_documento.find(item => item.id == formData.tipo_documento_id)?.nombre || ''}
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Número de Documento:</div>
+                                    <div className="px-4 py-2">{formData.numero_documento}</div>
+                                </div>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Nombre completo:</div>
+                                    <div className="px-4 py-2">{`${formData.primer_nombre} ${formData.segundo_nombre || ''} ${formData.primer_apellido} ${formData.segundo_apellido || ''}`.trim()}</div>
+                                </div>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Nacionalidad:</div>
+                                    <div className="px-4 py-2">{formData.nacionalidad}</div>
+                                </div>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Fecha de Nacimiento:</div>
+                                    <div className="px-4 py-2">{formData.fecha_nacimiento}</div>
+                                </div>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Email:</div>
+                                    <div className="px-4 py-2">{formData.email}</div>
+                                </div>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Celular:</div>
+                                    <div className="px-4 py-2">{formData.celular}</div>
+                                </div>
+
+                                {/* Información de Residencia */}
+                                <div className="bg-gray-100 px-4 py-2">
+                                    <h4 className="font-terpel font-normal text-gray-700">Información de Residencia</h4>
+                                </div>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Departamento:</div>
+                                    <div className="px-4 py-2">
+                                        {dataLists.departamentos.find(item => item.value == formData.departamento_id)?.label || ''}
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Ciudad:</div>
+                                    <div className="px-4 py-2">
+                                        {dataLists.ciudades.find(item => item.value == formData.ciudad_id)?.label || ''}
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Dirección:</div>
+                                    <div className="px-4 py-2">{formData.direccion}</div>
+                                </div>
+
+                                {/* Información de Pasaporte */}
+                                <div className="bg-gray-100 px-4 py-2">
+                                    <h4 className="font-terpel font-normal text-gray-700">Información de Pasaporte</h4>
+                                </div>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Número de Pasaporte:</div>
+                                    <div className="px-4 py-2">{formData.numero_pasaporte}</div>
+                                </div>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Fecha de Emisión:</div>
+                                    <div className="px-4 py-2">{formData.fecha_emision_pasaporte}</div>
+                                </div>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Fecha de Caducidad:</div>
+                                    <div className="px-4 py-2">{formData.fecha_caducidad_pasaporte}</div>
+                                </div>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Imagen del Pasaporte:</div>
+                                    <div className="px-4 py-2">{formData.imagen_pasaporte ? 'Cargado' : 'No cargado'}</div>
+                                </div>
+
+                                {/* Preferencias */}
+                                <div className="bg-gray-100 px-4 py-2">
+                                    <h4 className="font-terpel font-normal text-gray-700">Preferencias</h4>
+                                </div>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Acomodación:</div>
+                                    <div className="px-4 py-2">
+                                        {dataLists.acomodaciones.find(item => item.value == formData.acomodacion_id)?.label || ''}
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Extensión:</div>
+                                    <div className="px-4 py-2">
+                                        {dataLists.extensiones.find(item => item.value == formData.extension_id)?.label || ''}
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 border-b">
+                                    <div className="px-4 py-2 border-r font-terpel font-normal">Forma de Pago:</div>
+                                    <div className="px-4 py-2">
+                                        {dataLists.formas_pago.find(item => item.value == formData.forma_de_pago_id)?.label || ''}
+                                    </div>
+                                </div>
+                                {formData.restriccion_alimentaria && (
+                                    <div className="grid grid-cols-2 border-b">
+                                        <div className="px-4 py-2 border-r font-terpel font-normal">Restricción Alimentaria:</div>
+                                        <div className="px-4 py-2">{formData.restriccion_alimentaria}</div>
+                                    </div>
+                                )}
+                                {formData.solicitud_especial && (
+                                    <div className="grid grid-cols-2 border-b">
+                                        <div className="px-4 py-2 border-r font-terpel font-normal">Solicitud Especial:</div>
+                                        <div className="px-4 py-2">{formData.solicitud_especial}</div>
+                                    </div>
+                                )}
+
+                                {/* Información del Acompañante (si aplica) */}
                                 {tiene_acompanante && (
-                                    <div className="md:col-span-2 mt-4">
-                                        <h4 className="font-medium text-gray-700">Información del Acompañante:</h4>
-                                        <div className="ml-4 mt-2">
-                                            <div>
-                                                <span className="font-medium">Nombre:</span>
-                                                <span className="ml-2">{`${acompanante.primer_nombre} ${acompanante.segundo_nombre || ''} ${acompanante.primer_apellido} ${acompanante.segundo_apellido || ''}`.trim()}</span>
-                                            </div>
-                                            <div>
-                                                <span className="font-medium">Pasaporte:</span>
-                                                <span className="ml-2">{acompanante.numero_pasaporte}</span>
+                                    <>
+                                        <div className="bg-gray-100 px-4 py-2">
+                                            <h4 className="font-terpel font-normal text-gray-700">Información del Acompañante</h4>
+                                        </div>
+                                        <div className="grid grid-cols-2 border-b">
+                                            <div className="px-4 py-2 border-r font-terpel font-normal">Nombre completo:</div>
+                                            <div className="px-4 py-2">{`${acompanante.primer_nombre} ${acompanante.segundo_nombre || ''} ${acompanante.primer_apellido} ${acompanante.segundo_apellido || ''}`.trim()}</div>
+                                        </div>
+                                        <div className="grid grid-cols-2 border-b">
+                                            <div className="px-4 py-2 border-r font-terpel font-normal">Tipo de Documento:</div>
+                                            <div className="px-4 py-2">
+                                                {dataLists.tipos_documento.find(item => item.id == acompanante.tipo_documento_id)?.nombre || ''}
                                             </div>
                                         </div>
-                                    </div>
+                                        <div className="grid grid-cols-2 border-b">
+                                            <div className="px-4 py-2 border-r font-terpel font-normal">Número de Documento:</div>
+                                            <div className="px-4 py-2">{acompanante.numero_documento}</div>
+                                        </div>
+                                        <div className="grid grid-cols-2 border-b">
+                                            <div className="px-4 py-2 border-r font-terpel font-normal">Fecha de Nacimiento:</div>
+                                            <div className="px-4 py-2">{acompanante.fecha_nacimiento}</div>
+                                        </div>
+                                        <div className="grid grid-cols-2 border-b">
+                                            <div className="px-4 py-2 border-r font-terpel font-normal">Celular:</div>
+                                            <div className="px-4 py-2">{acompanante.numero_celular}</div>
+                                        </div>
+                                        <div className="grid grid-cols-2 border-b">
+                                            <div className="px-4 py-2 border-r font-terpel font-normal">Departamento:</div>
+                                            <div className="px-4 py-2">
+                                                {dataLists.departamentos.find(item => item.value == acompanante.departamento_id)?.label || ''}
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-2 border-b">
+                                            <div className="px-4 py-2 border-r font-terpel font-normal">Ciudad:</div>
+                                            <div className="px-4 py-2">
+                                                {(dataLists.acompanante_ciudades &&
+                                                    dataLists.acompanante_ciudades.find(item => item.value == acompanante.ciudad_id)?.label) || ''}
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-2 border-b">
+                                            <div className="px-4 py-2 border-r font-terpel font-normal">Dirección:</div>
+                                            <div className="px-4 py-2">{acompanante.direccion}</div>
+                                        </div>
+                                        <div className="grid grid-cols-2 border-b">
+                                            <div className="px-4 py-2 border-r font-terpel font-normal">Número de Pasaporte:</div>
+                                            <div className="px-4 py-2">{acompanante.numero_pasaporte}</div>
+                                        </div>
+                                        <div className="grid grid-cols-2 border-b">
+                                            <div className="px-4 py-2 border-r font-terpel font-normal">Fecha de Emisión:</div>
+                                            <div className="px-4 py-2">{acompanante.fecha_emision_pasaporte}</div>
+                                        </div>
+                                        <div className="grid grid-cols-2 border-b">
+                                            <div className="px-4 py-2 border-r font-terpel font-normal">Fecha de Caducidad:</div>
+                                            <div className="px-4 py-2">{acompanante.fecha_caducidad_pasaporte}</div>
+                                        </div>
+                                        <div className="grid grid-cols-2 border-b">
+                                            <div className="px-4 py-2 border-r font-terpel font-normal">Imagen del Pasaporte:</div>
+                                            <div className="px-4 py-2">{acompanante.imagen_pasaporte ? 'Cargado' : 'No cargado'}</div>
+                                        </div>
+                                        {acompanante.restriccion_alimentaria && (
+                                            <div className="grid grid-cols-2 border-b">
+                                                <div className="px-4 py-2 border-r font-terpel font-normal">Restricción Alimentaria:</div>
+                                                <div className="px-4 py-2">{acompanante.restriccion_alimentaria}</div>
+                                            </div>
+                                        )}
+                                        {acompanante.solicitud_especial && (
+                                            <div className="grid grid-cols-2 border-b">
+                                                <div className="px-4 py-2 border-r font-terpel font-normal">Solicitud Especial:</div>
+                                                <div className="px-4 py-2">{acompanante.solicitud_especial}</div>
+                                            </div>
+                                        )}
+                                    </>
                                 )}
                             </div>
                         </div>
@@ -1291,7 +1560,7 @@ export default function RegistrationForm() {
                             <CheckboxField
                                 label={
                                     <>
-                                        Acepto la <a href="/formulario/tc.pdf" target="_blank" rel="noopener noreferrer" className='text-red-500'>Política de Privacidad</a>
+                                        Acepto la <a href="/formulario/tc.pdf" target="_blank" rel="noopener noreferrer" className='text-terpel-red'>Política de Privacidad</a>
                                     </>
                                 }
                                 name="terminos_y_condiciones"
@@ -1337,22 +1606,22 @@ export default function RegistrationForm() {
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="bg-white rounded-lg border overflow-hidden">
                     <div className=" text-gray-500 p-6 text-center">
-                        <h1 className="text-1xl font-medium">PRE-REGISTRO</h1>
+                        <h1 className="text-1xl font-terpel-condensed font-bold">PRE-REGISTRO</h1>
                     </div>
 
                     {/* Indicador de progreso */}
                     <div className="px-6 pt-6">
                         <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-medium text-gray-700">
+                            <span className="text-sm font-terpel font-normal text-gray-700">
                                 Paso {currentStep + 1} de {steps.length}
                             </span>
-                            <span className="text-sm font-medium text-gray-700">
+                            <span className="text-sm font-terpel font-normal text-gray-700">
                                 {Math.round(progressPercent)}% Completado
                             </span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2.5">
                             <div
-                                className="bg-red-600 h-2.5 rounded-full transition-all duration-300 ease-in-out"
+                                className="bg-terpel-red h-2.5 rounded-full transition-all duration-300 ease-in-out"
                                 style={{ width: `${progressPercent}%` }}
                             ></div>
                         </div>
@@ -1364,9 +1633,9 @@ export default function RegistrationForm() {
                                     key={index}
                                     onClick={() => goToStep(index)}
                                     className={`flex flex-col items-center p-2 transition-colors rounded-md ${index === currentStep
-                                        ? 'text-red-600 font-medium'
+                                        ? 'text-terpel-red font-terpel font-terpel font-normal'
                                         : index < currentStep || sectionValidation[index]
-                                            ? 'text-gray-700 hover:text-red-500'
+                                            ? 'text-gray-700 hover:text-terpel-red'
                                             : 'text-gray-400 cursor-not-allowed'
                                         }`}
                                     disabled={index > currentStep && !sectionValidation[index]}
@@ -1378,7 +1647,7 @@ export default function RegistrationForm() {
                                     )}
                                     {validationErrors && Object.keys(validationErrors).length > 0 &&
                                         (index === 0 || index === 1) && getStepErrorCount(index) > 0 && (
-                                            <div className="mt-1 h-1 w-1 rounded-full bg-red-500"></div>
+                                            <div className="mt-1 h-1 w-1 rounded-full bg-terpel-red"></div>
                                         )}
                                 </button>
                             ))}
@@ -1402,7 +1671,7 @@ export default function RegistrationForm() {
                                 initial={{ opacity: 0, y: -20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -20 }}
-                                className="bg-red-100 text-red-700 px-4 py-3 m-6 rounded"
+                                className="bg-red-100 text-terpel-red px-4 py-3 m-6 rounded"
                             >
                                 {error}
                             </motion.div>
@@ -1435,7 +1704,7 @@ export default function RegistrationForm() {
                                 <button
                                     type="button"
                                     onClick={nextStep}
-                                    className="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                                    className="px-6 py-2 bg-terpel-red text-white rounded-md transition-colors"
                                 >
                                     Siguiente
                                 </button>
@@ -1443,7 +1712,7 @@ export default function RegistrationForm() {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                                    className="px-6 py-2 bg-terpel-red text-white rounded-md transition-colors"
                                 >
                                     {loading ? 'Enviando...' : 'Enviar Registro'}
                                 </button>

@@ -45,10 +45,10 @@ const DesktopItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descri
     // Modificamos los cardVariants para incluir la posición Y inicial
     const cardVariants = {
         hidden: (day: number | string) => {
-            const yOffset = 
-                day === 2 ? -48 : 
-                day === 3 || day === '4 al 6' ? 16 : 0;
-            
+            const yOffset =
+                day === 2 ? -48 :
+                    day === 3 || day === '4 al 6' ? 16 : 0;
+
             return {
                 opacity: 0,
                 x: -50,
@@ -56,10 +56,10 @@ const DesktopItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descri
             };
         },
         visible: (day: number | string) => {
-            const yOffset = 
-                day === 2 ? -48 : 
-                day === 3 || day === '4 al 6' ? 16 : 0;
-            
+            const yOffset =
+                day === 2 ? -48 :
+                    day === 3 || day === '4 al 6' ? 16 : 0;
+
             return {
                 opacity: 1,
                 x: 0,
@@ -99,9 +99,9 @@ const DesktopItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descri
                     className="text-center"
                     variants={contentVariants}
                 >
-                    <h3 className="text-red-600 text-sm font-light">Día {day}</h3>
+                    <h3 className="text-terpel-red text-sm font-light">Día {day}</h3>
                     <h4 className="font-light text-gray-700 text-sm">{title}</h4>
-                    <p className="text-sm font-light text-gray-700">{description}</p>
+                    <div className="text-sm font-light text-gray-700" dangerouslySetInnerHTML={{ __html: description }} />
                 </motion.div>
                 <motion.div
                     className="flex justify-center mt-5"
@@ -179,7 +179,7 @@ const DesktopItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descri
                 className="text-center mt-4"
                 variants={contentVariants}
             >
-                <h3 className="text-red-600 text-sm font-light">Día {day}</h3>
+                <h3 className="text-terpel-red text-sm font-light">Día {day}</h3>
                 <h4 className="font-light text-gray-700 text-sm">{title}</h4>
                 <p className="text-sm font-light text-gray-700">{description}</p>
             </motion.div>
@@ -265,9 +265,9 @@ const TabletItineraryCard: React.FC<ItineraryCardProps> = ({ day, title, descrip
                         </div>
 
                         <div className="text-center">
-                            <h3 className="text-red-600 text-lg font-medium">Día {day}</h3>
+                            <h3 className="text-terpel-red text-lg font-medium">Día {day}</h3>
                             <h4 className="font-medium text-gray-700 text-lg">{title}</h4>
-                            <p className="text-gray-700">{description}</p>
+                            <div className="text-gray-700" dangerouslySetInnerHTML={{ __html: description }} />
                         </div>
                     </motion.div>
                 </div>
@@ -298,7 +298,7 @@ const MobileCarousel: React.FC<MobileCarouselProps> = ({ itineraryData }) => {
             <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={handlePrev}
-                    className="bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center"
+                    className="bg-terpel-red text-white w-10 h-10 rounded-full flex items-center justify-center"
                     aria-label="Anterior"
                 >
                     &larr;
@@ -308,7 +308,7 @@ const MobileCarousel: React.FC<MobileCarouselProps> = ({ itineraryData }) => {
                 </span>
                 <button
                     onClick={handleNext}
-                    className="bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center"
+                    className="bg-terpel-red text-white w-10 h-10 rounded-full flex items-center justify-center"
                     aria-label="Siguiente"
                 >
                     &rarr;
@@ -321,7 +321,7 @@ const MobileCarousel: React.FC<MobileCarouselProps> = ({ itineraryData }) => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -100 }}
                 transition={{ duration: 0.3 }}
-                className="bg-opacity-80 rounded-xl p-4"
+                className="bg-opacity-80 rounded-xl p-4 **mobile-itinerary-card**"
             >
                 <div className="flex flex-col items-center gap-4">
                     <div className="w-full">
@@ -351,15 +351,13 @@ const MobileCarousel: React.FC<MobileCarouselProps> = ({ itineraryData }) => {
                     </div>
 
                     <div className="text-center w-full">
-                        <h3 className="text-red-600 text-lg font-medium">
+                        <h3 className="text-terpel-red text-lg font-medium">
                             Día {itineraryData[activeIndex].day}
                         </h3>
                         <h4 className="font-medium text-gray-700 text-lg">
                             {itineraryData[activeIndex].title}
                         </h4>
-                        <p className="text-gray-700">
-                            {itineraryData[activeIndex].description}
-                        </p>
+                        <div className="text-gray-700" dangerouslySetInnerHTML={{ __html: itineraryData[activeIndex].description }} />
                     </div>
                 </div>
             </motion.div>
@@ -369,7 +367,7 @@ const MobileCarousel: React.FC<MobileCarouselProps> = ({ itineraryData }) => {
                     <button
                         key={idx}
                         onClick={() => setActiveIndex(idx)}
-                        className={`w-3 h-3 mx-1 rounded-full ${idx === activeIndex ? 'bg-red-600' : 'bg-gray-300'
+                        className={`w-3 h-3 mx-1 rounded-full ${idx === activeIndex ? 'bg-terpel-red' : 'bg-gray-300'
                             }`}
                         aria-label={`Ir al día ${idx + 1}`}
                     />
@@ -400,7 +398,7 @@ const Itinerary: React.FC = () => {
 
     // Define image paths - make sure these match exactly with your file names
     const imagePaths = {
-        day1: "Salida_bogotá.png",
+        day1: "Salida_bogota.png",
         day2: "Cena Santiago Bernabeu.png",
         day3: "Toledo_Jornada_Corporativa.png",
         day4to6: "Globo Marrakech.png",
@@ -423,20 +421,20 @@ const Itinerary: React.FC = () => {
         },
         {
             day: 3,
-            title: "Toledo jornada corporativa",
+            title: "Jornada Corporativa - Toledo",
             description: "",
             image: imagePaths.day3
         },
         {
-            day: '4 al 6',
-            title: "Vuelo a Marrakech",
-            description: "Vuelo en globo. Cena de premiación Desierto de Agafay",
+            day: 4,
+            title: "Viaje a Marrakech",
+            description: "<div class='text-terpel-red'>Día 5: <div class=\"text-black\">Vuelo en globo</div></div><br/><div class='text-terpel-red'>Día 6: </div>Cena de premiación Desierto de Agafay",
             image: imagePaths.day4to6
         },
         {
             day: 7,
-            title: "Show Wah - Madrid",
-            description: "",
+            title: "Regreso a Madrid",
+            description: "Madrid y cena/show Wah",
             image: imagePaths.day7
         },
         {
@@ -468,7 +466,7 @@ const Itinerary: React.FC = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
-                        className="text-3xl md:text-4xl font-bold text-red-600 text-center mb-4"
+                        className="text-3xl md:text-4xl font-bold text-terpel-red text-center mb-4"
                     >
                         PLAN DE VIAJE
                     </motion.h1>
@@ -540,7 +538,7 @@ const Itinerary: React.FC = () => {
                 >
                     <a
                         href="/planes"
-                        className="inline-block bg-red-600 text-white px-6 py-2 md:px-8 md:py-3 rounded-md hover:bg-red-700 transition-colors"
+                        className="inline-block bg-terpel-red text-white px-6 py-2 md:px-8 md:py-3 rounded-md transition-colors"
                     >
                         VER DETALLE
                     </a>

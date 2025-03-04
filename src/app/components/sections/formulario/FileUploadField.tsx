@@ -140,8 +140,8 @@ export default function FileUploadField({
 
     return (
         <div className="mb-4">
-            <label className="block text-gray-700 font-medium mb-2">
-                {label} {required && <span className="text-red-600">*</span>}
+            <label className="block text-gray-700 font-terpel font-normal mb-2">
+                {label} {required && <span className="text-terpel-red">*</span>}
             </label>
 
             {preview && imageDimensions.width > 0 && (
@@ -217,7 +217,7 @@ export default function FileUploadField({
             )}
 
             {shouldShowValidationError && (
-                <p className="mt-1 text-sm text-red-600">La imagen {label.toLowerCase()} es obligatoria</p>
+                <p className="mt-1 text-sm text-terpel-red">La imagen {label.toLowerCase()} es obligatoria</p>
             )}
         </div>
     );

@@ -78,6 +78,7 @@ body {
 
 @layer base {
   body {
-    @apply overflow-x-hidden min-w-full;
+    @apply overflow-x-hidden min-w-full font-sans font-normal; 
+    font-family: 'TerpelSans', sans-serif; 
   }
 }

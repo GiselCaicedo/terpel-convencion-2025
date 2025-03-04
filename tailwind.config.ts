@@ -11,6 +11,12 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        terpel: {
+          red: "#FF0818",
+          white: "#FFFFFF",
+          yellow: "#FFE500",
+          "yellow-2": "#FDB913"
+        },
       },
       fontFamily: {
         terpel: ['TerpelSans', 'sans-serif'],

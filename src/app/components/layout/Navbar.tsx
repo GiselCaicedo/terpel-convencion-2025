@@ -30,6 +30,7 @@ export default function Navbar() {
     // Check if current path is /formulario or /formulario/thankfull
     const isFormularioPage = pathname === '/formulario';
     const isThankfullPage = pathname === '/formulario/thankyou';
+    const isHomePage = pathname === '/';
 
     useEffect(() => {
         const controlNavbar = () => {
@@ -47,6 +48,9 @@ export default function Navbar() {
 
         // Actualizar el link activo basado en la posición de scroll
         const updateActiveSection = () => {
+            // Only update active section on home page
+            if (!isHomePage) return;
+            
             const sections = {
                 'inicio': 0,
                 'planes': document.getElementById('planes')?.offsetTop || 0,
@@ -91,20 +95,25 @@ export default function Navbar() {
             window.removeEventListener('scroll', updateActiveSection);
             window.removeEventListener('mousemove', handleMouseMove);
         };
-    }, [lastScrollY, mouseAtTop, isAtTop]);
+    }, [lastScrollY, mouseAtTop, isAtTop, isHomePage]);
 
     const scrollToSection = (sectionId: string) => {
-        const section = document.getElementById(sectionId);
-        if (section) {
-
-            const offsetTop = section.offsetTop - 120;
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
-            });
+        if (isHomePage) {
+            // If we're on home page, simply scroll to section
+            const section = document.getElementById(sectionId);
+            if (section) {
+                const offsetTop = section.offsetTop - 120;
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+            setActiveLink(sectionId);
+        } else {
+            // If we're not on home page, navigate to home page with hash
+            router.push(`/#${sectionId}`);
         }
-        setActiveLink(sectionId);
-        setMobileMenuOpen(false); 
+        setMobileMenuOpen(false);
     };
 
     const navigateToFormulario = () => {
@@ -119,9 +128,15 @@ export default function Navbar() {
         const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
             e.preventDefault();
             if (sectionId === 'inicio') {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                if (isHomePage) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    router.push('/');
+                }
             } else if (href.startsWith('#')) {
                 scrollToSection(sectionId);
+            } else if (href === '/planes') {
+                router.push('/planes');
             } else {
                 // Para links externos o páginas separadas
                 window.location.href = href;
@@ -137,7 +152,7 @@ export default function Navbar() {
                     text-white text-sm font-light tracking-[0.2em]
                     hover:text-gray-300 transition-all duration-300
                     relative pb-2
-                    ${isActive ? 'after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-full after:h-0.5 after:bg-yellow-400' : ''}
+                    ${isActive && isHomePage ? 'after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-full after:h-0.5 after:bg-yellow-400' : ''}
                 `}
             >
                 {children}
@@ -167,7 +182,7 @@ export default function Navbar() {
             <NavLink href="#mapas">MAPAS</NavLink>
             <button
                 onClick={navigateToFormulario}
-                className="bg-red-600 text-white px-4 lg:px-6 py-1 text-sm font-normal tracking-[0.2em] hover:bg-red-700 transition-colors rounded-3xl"
+                className="bg-terpel-red text-white px-4 lg:px-6 py-1 text-sm font-normal tracking-[0.2em] transition-colors rounded-3xl"
             >
                 REGISTRARME
             </button>
@@ -192,7 +207,7 @@ export default function Navbar() {
                 flex items-center justify-between fixed top-0 left-0 z-50
                 transition-all duration-300
                 ${isVisible ? 'translate-y-0' : '-translate-y-full'}
-                ${isFormularioPage ? 'bg-red-600' : 
+                ${isFormularioPage ? 'bg-terpel-red' : 
                   isThankfullPage ? '' :
                   isAtTop ? 'bg-transparent' : 'bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm'}
                 ${mobileMenuOpen ? 'bg-black' : ''}
@@ -223,7 +238,7 @@ export default function Navbar() {
                     <div className="flex items-center justify-between mt-2">
                         <button
                             onClick={navigateToFormulario}
-                            className="bg-red-600 text-white px-6 py-2 text-sm font-normal tracking-[0.2em] hover:bg-red-700 transition-colors rounded-3xl"
+                            className="bg-terpel-red text-white px-6 py-2 text-sm font-normal tracking-[0.2em] transition-colors rounded-3xl"
                         >
                             REGISTRARME
                         </button>

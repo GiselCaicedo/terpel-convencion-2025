@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
-
 const API_URL = 'https://api.convenciondealiadosterpel.com/api';
 const DEFAULT_TIMEOUT = 30000; 
 const CACHE_DURATION = 5 * 60 * 100000; 
@@ -26,6 +25,10 @@ interface AcompananteData {
     imagen_pasaporte: File | null;
     solicitud_especial?: string;
     restriccion_alimentaria?: string;
+    // Nuevos campos de dirección para el acompañante
+    departamento_id: string;
+    ciudad_id: string;
+    direccion: string;
 }
 
 interface UserData {
@@ -39,6 +42,7 @@ interface UserData {
     segundo_apellido?: string;
     departamento_id: string;
     ciudad_id: string;
+    direccion: string;
     email: string;
     celular: string;
     acomodacion_id: string;

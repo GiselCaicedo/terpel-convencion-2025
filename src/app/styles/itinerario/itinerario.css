@@ -18,3 +18,35 @@
 .image-hover-effect:hover {
     transform: scale(1.1);
 }
+
+
+/* Estilos específicos para la tarjeta del itinerario en móvil */
+.mobile-itinerary-card {
+    padding: 1.5rem; /* Aumenta el padding interior para más espacio */
+    margin-left: 1rem; /* Añade margen izquierdo y derecho */
+    margin-right: 1rem;
+}
+
+.mobile-itinerary-card h3.text-terpel-red {
+    font-size: 1.2rem; /* Aumenta el tamaño de la fuente del día */
+    margin-bottom: 0.5rem; /* Espacio debajo del día */
+}
+
+.mobile-itinerary-card h4.font-medium.text-gray-700.text-lg {
+    font-size: 1.4rem; /* Aumenta el tamaño del título */
+    margin-bottom: 0.75rem; /* Espacio debajo del título */
+    line-height: 1.3; /* Mejora la altura de línea del título si es multilinea */
+}
+
+.mobile-itinerary-card .text-gray-700 {
+    font-size: 1rem; /* Tamaño de fuente para la descripción */
+    line-height: 1.5; /* Mejora la altura de línea de la descripción para mayor legibilidad */
+}
+
+.mobile-itinerary-card .flex.justify-center.mt-4 > div.relative {
+    margin-top: 1rem; /* Añade margen superior a los puntos del carrusel */
+}
+
+.mobile-itinerary-card .flex.items-center.justify-center > div.relative {
+    margin-bottom: 1rem; /* Añade margen inferior al icono de location */
+}

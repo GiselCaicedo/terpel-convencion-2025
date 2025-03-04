@@ -49,8 +49,8 @@ const Banner = () => {
                         <button
                             onClick={openVideo}
                             className="w-12 h-12 rounded-full flex items-center justify-center 
-                                    bg-red-600/20 border-2 border-white
-                                    transition-all duration-300 hover:bg-red-700"
+                                    bg-terpel-red border-2 border-white
+                                    transition-all duration-300"
                             aria-label="Play video"
                         >
                             <svg
@@ -67,13 +67,13 @@ const Banner = () => {
                 </div>
                 <div className="absolute bottom-16 left-0 right-0 flex flex-col items-center text-center">
                     <div className="mx-auto max-w-xs">
-                        <h1 className="text-yellow-300 text-3xl font-bold leading-none">
+                        <h1 className="text-terpel-yellow text-3xl font-terpel font-bold leading-none">
                             Convención
                             <br />
                             de Aliados 2025
                         </h1>
                         <div className="text-white mt-1">
-                            <h2 className="text-sm tracking-wide font-medium mb-0 leading-tight">
+                            <h2 className="text-sm tracking-wide font-terpel font-normal mb-0 leading-tight">
                                 MADRID - MARRAKECH
                             </h2>
                             <p className="text-xs font-light leading-tight">
@@ -87,7 +87,7 @@ const Banner = () => {
                         <div className="relative w-full max-w-4xl aspect-video mx-auto">
                             <button
                                 onClick={closeVideo}
-                                className="absolute -top-12 right-0 text-white hover:text-gray-300 bg-red-600 rounded-full p-1"
+                                className="absolute -top-12 right-0 text-white hover:text-gray-300 bg-terpel-red rounded-full p-1"
                                 aria-label="Close video"
                             >
                                 <X size={24} />
@@ -148,10 +148,10 @@ const Banner = () => {
             {/* Text overlay - Desktop */}
             <div className="absolute bottom-0 left-0 right-0 p-8 pb-16">
                 <div className="mx-auto md:pl-16">
-                    <h1 className="text-yellow-300 text-3xl md:text-5xl leading-tight tracking-[0.5rem]">
-                        <span className="font-medium bold">Convención</span>
+                    <h1 className="text-terpel-yellow text-3xl md:text-5xl leading-tight tracking-[0.5rem]">
+                        <span className="font-terpel font-normal bold">Convención</span>
                         <br />
-                        <span className="font-medium">de Aliados</span>
+                        <span className="font-terpel font-normal">de Aliados</span>
                         <span className="font-extrabold"> 2025</span>
                     </h1>
                     <div className="text-white mt-4">

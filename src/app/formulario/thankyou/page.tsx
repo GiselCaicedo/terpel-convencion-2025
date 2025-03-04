@@ -46,7 +46,7 @@ export default function ThankYouPage() {
                         <div className={`transition-all duration-700 delay-300 ease-in-out transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
                             <Link href="/">
                                 <button
-                                    className="bg-yellow-400 hover:bg-yellow-500 text-red-900 font-bold py-3 px-8 rounded-md text-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-300"
+                                    className="bg-terpel-yellow text-terpel-red font-bold py-3 px-8 rounded-md text-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-300"
                                     aria-label="Volver al inicio"
                                 >
                                     Volver al inicio

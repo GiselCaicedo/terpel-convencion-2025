@@ -56,13 +56,11 @@ const LocationMaps = () => {
             variants={itemVariants}
           >
             <div className="flex items-center justify-center mb-4">
-              <h2 className="text-5xl font-extrabold text-red-600">
+              <h2 className="text-5xl font-terpel font-bold text-terpel-red">
                 UBICACIÓN TURÍSTICA
               </h2>
             </div>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              Pendiente información
-            </p>
+
           </motion.div>
           
           <div className="grid lg:grid-cols-2 gap-16">
@@ -75,10 +73,10 @@ const LocationMaps = () => {
                 <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 mb-6 transform transition-all duration-300 hover:shadow-sm hover:-translate-y-1">
                   <div className="flex items-start gap-4">
                     <div className="bg-red-50 rounded-xl p-3">
-                      <Building2 className="w-8 h-8 text-red-500" />
+                      <Building2 className="w-8 h-8 text-terpel-red" />
                     </div>
                     <div>
-                      <h3 className="text-3xl font-bold text-gray-800 mb-1">
+                      <h3 className="text-3xl font-terpel font-bold text-gray-800 mb-1">
                         {location.city}
                       </h3>
                       <p className="text-xl text-gray-600 mb-2">

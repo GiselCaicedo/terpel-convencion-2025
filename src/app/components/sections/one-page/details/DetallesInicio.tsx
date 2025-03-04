@@ -34,11 +34,11 @@ export default function DetallesInicio() {
                     transition={{ duration: 0.8, delay: 0.2 }}
                     className="text-center max-w-4xl"
                 >
-                    <p className="text-lg mb-4">
+                    <p className="text-lg mb-4 text-black dark:text-white font-terpel-condensed font-normal" style={{ color: 'black', textShadow: '0 0 5px rgba(255,255,255,0.5)' }}>
                         Iremos por más territorios en nuestra convención de Aliados 2025: este año visitaremos 2 grandiosas ciudades:
-                        <span className="text-red-600 font-medium"> Madrid </span>
+                        <span className="text-terpel-red font-bold"> Madrid </span>
                         y
-                        <span className="text-red-600 font-medium"> Marrakech</span>,
+                        <span className="text-terpel-red font-bold"> Marrakech</span>,
                         donde descubriremos juntos otras culturas, nuevos sabores y espacios llenos de historia,
                         con el fin de inspirarnos y seguir liderando el mercado para crear la Terpel que soñamos.
                     </p>
